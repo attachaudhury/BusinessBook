@@ -1,0 +1,26 @@
+// ==================================================
+// BRANDING
+// ==================================================
+
+.matero-branding {
+  color: inherit;
+  white-space: nowrap;
+  font-size: 16px;
+
+  .matero-branding-logo-expanded {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    vertical-align: middle;
+
+    [dir='rtl'] & {
+      margin-left: 10px;
+      margin-right: auto;
+    }
+  }
+
+  .matero-branding-name {
+    font-weight: normal;
+    vertical-align: middle;
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "ng-matero-ng-add",
+  "title": "Ng-Matero ng-add schematic",
+  "type": "object",
+  "properties": {
+    "project": {
+      "type": "string",
+      "description": "Name of the project.",
+      "$default": {
+        "$source": "projectName"
+      }
+    },
+    "layout": {
+      "description": "The layout template to apply",
+      "type": "string",
+      "default": "static",
+      "x-prompt": {
+        "message": "Choose a prebuilt layout template:",
+        "type": "list",
+        "items": [
+          {
+            "value": "static",
+            "label": "Static"
+          },
+          {
+            "value": "dynamic",
+            "label": "Dynamic"
+          }
+        ]
+      }
+    },
+    "nav": {
+      "description": "The navigation type to apply",
+      "type": "string",
+      "default": "side",
+      "x-prompt": {
+        "message": "Choose a prebuilt navigation type:",
+        "type": "list",
+        "items": [
+          {
+            "value": "side",
+            "label": "Side Navigation"
+          },
+          {
+            "value": "top",
+            "label": "Top Navigation"
+          }
+        ]
+      }
+    },
+    "theme": {
+      "description": "The theme style to apply",
+      "type": "string",
+      "default": "light",
+      "x-prompt": {
+        "message": "Choose a prebuilt theme style:",
+        "type": "list",
+        "items": [
+          {
+            "value": "light",
+            "label": "Light"
+          },
+          {
+            "value": "dark",
+            "label": "Dark"
+          }
+        ]
+      }
+    },
+    "dir": {
+      "description": "The dir to apply",
+      "type": "string",
+      "default": "ltr",
+      "x-prompt": {
+        "message": "Choose a prebuilt direction option:",
+        "type": "list",
+        "items": [
+          {
+            "value": "ltr",
+            "label": "LTR"
+          },
+          {
+            "value": "rtl",
+            "label": "RTL"
+          }
+        ]
+      }
+    },
+    "gestures": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether gesture support should be set up.",
+      "x-prompt": "Set up HammerJS for gesture recognition?"
+    },
+    "animations": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether Angular browser animations should be set up.",
+      "x-prompt": "Set up browser animations for Angular Material?"
+    }
+  },
+  "required": []
+}

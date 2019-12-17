@@ -1,0 +1,59 @@
+// ==================================================
+// HEADER
+// ==================================================
+
+.matero-header {
+  position: relative;
+  z-index: 201;
+  display: block;
+
+  .matero-toolbar {
+    padding: 0;
+  }
+
+  .matero-user-avatar {
+    margin-right: 8px;
+
+    [dir='rtl'] & {
+      margin-left: 8px;
+      margin-right: auto;
+    }
+  }
+
+  // Layout control
+  .matero-header-fixed & {
+    position: sticky;
+    top: 0;
+  }
+}
+
+.matero-toolbar {
+  @include mat-elevation(2);
+
+  .badge {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    font-size: 12px;
+    border-radius: 10px;
+  }
+}
+
+// Colorful
+.matero-header-white {
+  .matero-toolbar,
+  .matero-topmenu {
+    background-color: white;
+  }
+}
+
+.matero-hamburger.mat-button {
+  height: 100%;
+  padding: 0;
+
+  @include bp-lt(small) {
+    & {
+      min-width: 15%;
+    }
+  }
+}

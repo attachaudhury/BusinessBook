@@ -1,0 +1,28 @@
+export interface User{
+  _id?:string;
+  address?:string;
+  agency?:any;
+  brandimage?:any;
+  companyname?:string;
+  companyimage?:string;
+  companymessage?:string;
+  companyaddress?:string;
+  createddate?:Date;
+  city?:string;
+  country?:string;
+  designation?:string;
+  dateofbirth?:any;
+  email?:string;
+  firstname?:string;
+  activestatus?:String;
+  lastname?:string;
+  lastlogindate?:any;
+  personalphone?:string;
+  password?:string;
+  profileimage?:string;
+  role?:string;
+  title?:string;
+  username?:string;
+  workphone?:string;
+  website?:string;
+}

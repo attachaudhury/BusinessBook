@@ -7,6 +7,7 @@ import { AuthLayoutComponent } from '../theme/auth-layout/auth-layout.component'
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './sessions/login/login.component';
 import { RegisterComponent } from './sessions/register/register.component';
+import { AuthGuard } from '@shared/guard/auth.guard';
 
 const routes: Routes = [
   {
@@ -18,6 +19,7 @@ const routes: Routes = [
         path: 'dashboard',
         component: DashboardComponent,
         data: { title: 'Dashboard', titleI18n: 'dashboard' },
+        canActivate: [AuthGuard],
       },
       {
         path: 'design',
@@ -62,6 +64,12 @@ const routes: Routes = [
         path: 'extensions',
         loadChildren: () => import('./extensions/extensions.module').then(m => m.ExtensionsModule),
       },
+      {
+        path: 'category',
+        loadChildren: () => import('./category/category.module').then(m => m.CategoryModule),
+        data: { title: 'Category', titleI18n: 'category' },
+        canActivate: [AuthGuard],
+      },
     ],
   },
   {
@@ -86,5 +94,6 @@ const routes: Routes = [
     }),
   ],
   exports: [RouterModule],
+  providers: [AuthGuard]
 })
 export class RoutesRoutingModule {}

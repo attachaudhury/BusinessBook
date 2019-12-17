@@ -381,6 +381,19 @@
           "type": "link"
         }
       ]
+    },
+    {
+      "state": "category",
+      "name": "Category",
+      "type": "sub",
+      "icon": "widgets",
+      "children": [
+        {
+          "state": "add",
+          "name": "Add Category",
+          "type": "link"
+        }
+      ]
     }
   ]
 }
