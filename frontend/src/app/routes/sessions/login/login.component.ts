@@ -17,7 +17,13 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log('category calling in login')
+    this.httpService.categoryget().then(res=>{
+console.log('result in login')
+console.log(res)
+    });
+  }
 
   login() {
     console.log(this.reactiveForm.value);

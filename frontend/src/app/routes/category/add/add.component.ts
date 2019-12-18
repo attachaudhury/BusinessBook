@@ -1,49 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { HttpService } from '@core';
 
 @Component({
   selector: 'app-category-add',
   templateUrl: './add.component.html',
 })
 export class AddComponent implements OnInit {
-  q = {
-    username: '',
-    email: '',
-    gender: '',
-  };
-
-  reactiveForm1: FormGroup;
   reactiveForm2: FormGroup;
 
-  constructor(private fb: FormBuilder) {
-    this.reactiveForm1 = this.fb.group({
-      username: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
-      gender: ['', [Validators.required]],
-      city: ['', [Validators.required]],
-      address: ['', [Validators.required]],
-      company: ['', [Validators.required]],
-      mobile: ['', [Validators.required]],
-      tele: ['', [Validators.required]],
-      website: ['', [Validators.required]],
-      date: ['', [Validators.required]],
-    });
-
+  constructor(private fb: FormBuilder,private httpService: HttpService) {
+  
     this.reactiveForm2 = this.fb.group({
-      username: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
-      gender: ['', [Validators.required]],
-      city: ['', [Validators.required]],
-      address: ['', [Validators.required]],
-      company: ['', [Validators.required]],
-      mobile: ['', [Validators.required]],
-      tele: ['', [Validators.required]],
-      website: ['', [Validators.required]],
-      date: ['', [Validators.required]],
+      name: ['', [Validators.required]],
+      parent: [''],
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    
+  }
 
   getErrorMessage(form: FormGroup) {
     return form.get('email').hasError('required')
@@ -51,5 +27,12 @@ export class AddComponent implements OnInit {
       : form.get('email').hasError('email')
       ? 'Not a valid email'
       : '';
+  }
+  save()
+  {
+    if(this.reactiveForm2.valid)
+    {
+      this.httpService.categoryadd(this.reactiveForm2.value);
+    }
   }
 }

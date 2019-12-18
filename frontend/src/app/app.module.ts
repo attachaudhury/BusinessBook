@@ -32,7 +32,7 @@ import { ToastrModule } from 'ngx-toastr';
     ToastrModule.forRoot(),
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: DefaultInterceptor, multi: true },
+    {provide: HTTP_INTERCEPTORS, useClass: DefaultInterceptor, multi: true},
     StartupService,
     {
       provide: APP_INITIALIZER,

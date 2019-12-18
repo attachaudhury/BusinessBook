@@ -64,8 +64,10 @@ export class HttpService {
       this.router.navigate(['/auth/login'])
     }
     autoAuthUser() {
+      console.log('trying to auto auth user');
       const isloggedin = localStorage.getItem("isloggedin");
       if (isloggedin) {
+        console.log('user logged in via autoauth');
         this.isloggedin = true
         const currentUser = JSON.parse(localStorage.getItem("user"));
         this.user = currentUser;
@@ -161,4 +163,34 @@ export class HttpService {
     }
     // #endregion login logout profile users
   
+
+    // #region category
+    categoryadd(data) {
+      return new Promise((resolve,reject)=>{
+        this.http.post <{
+          status: string,
+          data: any
+        } > (environment.apiUrl + "category/add", data)
+        .subscribe(res => {
+          console.log(res);
+          if (res.status == "success") {
+            resolve();
+            console.log('category added successfully')
+          }
+        });
+      });
+    }
+    categoryget(): Promise<any>  {
+      return new Promise((resolve,reject)=>{this.http.get <{
+          status: string,
+          data: any
+        }>(environment.apiUrl + "category")
+        .subscribe(res => {
+          if (res.status == "success") {
+            resolve(res);
+          }
+        })
+      })
+    }
+    // #endregion category
 }

@@ -467,5 +467,13 @@ app.get("/api/user/getusersrolewise", checkAuth, async (req, res, next) => {
 })
 // #endregion user api
 
+//#region category
+app.get("/api/category", (req, res, next) => {
+  console.log('category request');
+  res.status(201).json({
+    status: "success",
+  })
+})
+//#endregion category
 
 module.exports = app;
