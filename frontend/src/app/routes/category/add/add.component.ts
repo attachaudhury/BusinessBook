@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { HttpService } from '@core';
+import { category } from '@shared/models/category';
 
 @Component({
   selector: 'app-category-add',
@@ -8,31 +9,29 @@ import { HttpService } from '@core';
 })
 export class AddComponent implements OnInit {
   reactiveForm2: FormGroup;
+  categories:category[];
+  constructor(private fb: FormBuilder, private httpService: HttpService) {
 
-  constructor(private fb: FormBuilder,private httpService: HttpService) {
-  
     this.reactiveForm2 = this.fb.group({
       name: ['', [Validators.required]],
-      parent: [''],
+      parentId: [''],
     });
   }
 
   ngOnInit() {
-    
+    this.httpService.categorygetarraytree().then(res => {
+      console.log('categorygettree in add');
+      console.log(res);
+      if(res.status=="success")
+      {
+        this.categories = res.data
+      }
+    });
   }
-
-  getErrorMessage(form: FormGroup) {
-    return form.get('email').hasError('required')
-      ? 'You must enter a value'
-      : form.get('email').hasError('email')
-      ? 'Not a valid email'
-      : '';
-  }
-  save()
-  {
-    if(this.reactiveForm2.valid)
-    {
-      this.httpService.categoryadd(this.reactiveForm2.value);
+  async save() {
+    if (this.reactiveForm2.valid) {
+      var result =  await this.httpService.categoryadd(this.reactiveForm2.value);
+      console.log(result);
     }
   }
 }

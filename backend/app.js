@@ -6,6 +6,7 @@ var fse = require('fs-extra');
 var bodyParser = require('body-parser');
 var mongoose = require("mongoose")
 var user = require('./Models/user')
+var category = require('./Models/category')
 var checkAuth = require("./middleware/check-auth")
 var app = express();
 var multiparty = require('multiparty');
@@ -22,16 +23,18 @@ app.use(bodyParser.urlencoded({
 }));
 var timeout = require('connect-timeout');
 app.use(timeout('960000s'));
-app.use(express.static("public"));
+
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, PATCH, OPTIONS,DELETE");
   next()
 });
+app.use(express.static("public"));
 //dbsetting();
 async function dbsetting() {
   await user.remove({});
+  await category.remove({});
   user.findOne({
     username: 'admin',
     role: 'admin'
@@ -70,6 +73,21 @@ async function dbsetting() {
   }).catch(err => {
     console.log(err)
   })
+
+  var elec = new category({name: "Electronics"});
+  await elec.save();
+  
+  var mob = new category({name: "Mobiles"});
+  mob.parentId = elec._id;
+  await mob.save();
+
+  var tv = new category({name: "Tv"});
+  tv.parentId = elec._id;
+  await tv.save();
+  
+  var cl = new category({name: "Clothes"});
+  await cl.save();
+  
 }
 app.get("/", (req, res, next) => {
   res.status(201).json({
@@ -468,11 +486,64 @@ app.get("/api/user/getusersrolewise", checkAuth, async (req, res, next) => {
 // #endregion user api
 
 //#region category
-app.get("/api/category", (req, res, next) => {
+app.get("/api/category", async (req, res, next) => {
   console.log('category request');
+  
+  var result = await category.find({});
   res.status(201).json({
     status: "success",
+    data:result
   })
+})
+app.get("/api/category/getarraytree", async (req, res, next) => {
+  console.log('category/gettree request');
+  var result = await category.GetFullArrayTree();
+  res.status(201).json({
+    status: "success",
+    data:result
+  })
+})
+app.post("/api/category/add",async (req, res, next) => {
+  console.log('category add request');
+  try
+  {
+    if(!req.body.name){
+      res.status(201).json({
+        status: "failed",
+        message:'Name empty',
+      });
+    }
+    var obj = new category({
+      name:req.body.name,
+    });
+    if(req.body.parentId)
+    {
+      obj.parentId =  req.body.parentId;
+    }
+    var result = await obj.save();
+    if(result){
+      res.status(201).json({
+        status: "success",
+        data:result,
+
+      })
+    }
+    else
+    {
+      res.status(201).json({
+        status: "failed",
+        message:'Item not saved!'
+      })
+    }
+  }catch(ex)
+  {
+    res.status(201).json({
+      status: "failed",
+      message:'item not saved!!',
+      ex:ex.message
+    });
+  }
+  
 })
 //#endregion category
 

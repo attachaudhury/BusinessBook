@@ -1,4 +1,4 @@
-export interface User{
+export interface user{
   _id?:string;
   address?:string;
   agency?:any;

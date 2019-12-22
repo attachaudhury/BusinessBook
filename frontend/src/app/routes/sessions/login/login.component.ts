@@ -16,13 +16,8 @@ export class LoginComponent implements OnInit {
       password: ['', [Validators.required]],
     });
   }
-
   ngOnInit() {
-    console.log('category calling in login')
-    this.httpService.categoryget().then(res=>{
-console.log('result in login')
-console.log(res)
-    });
+    
   }
 
   login() {

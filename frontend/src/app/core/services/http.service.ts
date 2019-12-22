@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Router} from '@angular/router';
-import { User } from '@shared/models/User';
+import { user } from '@shared/models/user';
 import { environment } from '@env/environment';
 
 @Injectable({
@@ -11,7 +11,7 @@ import { environment } from '@env/environment';
 })
 export class HttpService {
   private isloggedin = false;
-  public user: User = null;
+  public user: user = null;
   private authlistener = new Subject < boolean > ();
   private userlistener = new Subject < any > ();
   
@@ -19,8 +19,7 @@ export class HttpService {
 
     // #region login logout profile users
     signin(username: string, password: string) {
-      console.log(username);
-      const user: User = {
+      const user: user = {
         username: username,
         password: password
       }
@@ -64,10 +63,8 @@ export class HttpService {
       this.router.navigate(['/auth/login'])
     }
     autoAuthUser() {
-      console.log('trying to auto auth user');
       const isloggedin = localStorage.getItem("isloggedin");
       if (isloggedin) {
-        console.log('user logged in via autoauth');
         this.isloggedin = true
         const currentUser = JSON.parse(localStorage.getItem("user"));
         this.user = currentUser;
@@ -155,7 +152,7 @@ export class HttpService {
           console.log(res)
           if (res.status == "success") {
             this._snackBar.open("New User Added", 'Close', {
-              duration: 3000,
+              duration: 6000,
             });
             
           }
@@ -165,21 +162,7 @@ export class HttpService {
   
 
     // #region category
-    categoryadd(data) {
-      return new Promise((resolve,reject)=>{
-        this.http.post <{
-          status: string,
-          data: any
-        } > (environment.apiUrl + "category/add", data)
-        .subscribe(res => {
-          console.log(res);
-          if (res.status == "success") {
-            resolve();
-            console.log('category added successfully')
-          }
-        });
-      });
-    }
+    
     categoryget(): Promise<any>  {
       return new Promise((resolve,reject)=>{this.http.get <{
           status: string,
@@ -189,8 +172,54 @@ export class HttpService {
           if (res.status == "success") {
             resolve(res);
           }
+          else{
+            reject();
+            this._snackBar.open("Cannot get categories", 'Close', {
+              duration: 6000,
+            });
+          }
         })
       })
+    }
+    categorygetarraytree(): Promise<any>  {
+      return new Promise((resolve,reject)=>{this.http.get <{
+          status: string,
+          data: any
+        }>(environment.apiUrl + "category/getarraytree")
+        .subscribe(res => {
+          if (res.status == "success") {
+            resolve(res);
+          }
+          else{
+            reject();
+            this._snackBar.open("Cannot get categories", 'Close', {
+              duration: 6000,
+            });
+          }
+        })
+      })
+    }
+    categoryadd(data) {
+      return new Promise((resolve,reject)=>{
+        this.http.post <{
+          status: string,
+          data: any
+        } > (environment.apiUrl + "category/add", data)
+        .subscribe(res => {
+          if (res.status == "success") {
+            resolve(res);
+            this._snackBar.open("Item Added", 'Close', {
+              duration: 6000,
+            });
+          }
+          else{
+            reject();
+            this._snackBar.open("Item Not Added", 'Close', {
+              duration: 6000,
+            });
+          }
+        });
+      });
     }
     // #endregion category
 }
