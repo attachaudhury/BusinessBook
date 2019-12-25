@@ -23,7 +23,7 @@ In backend folder for starting backend express application run command
 npm run local
 ```
 
-In frontend folder for starting frontend angular application run comman
+In frontend folder for starting frontend angular application run command
  ```sh
 ng serve
 ```
@@ -39,11 +39,10 @@ npm start:electron
 Atta Chaudhury – attachaudhury@gmail.com
 If you face any problem raise issue 
 
-[https://github.com/attaprepos/BusinessBook]
 
 ## Contributing
 
-1. Fork it (<https://github.com/yourname/yourproject/fork>)
+1. Fork it (<https://github.com/attaprepos/BusinessBook>)
 2. Create your feature branch (`git checkout -b feature/fooBar`)
 3. Commit your changes (`git commit -am 'Add some fooBar'`)
 4. Push to the branch (`git push origin feature/fooBar`)
