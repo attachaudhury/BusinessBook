@@ -2,7 +2,7 @@
 > A web/desktop erp built for nodejs (Node/Electron/Angualr/Express/Mongo).
 
 
-I am baking a open source erp for small and medium size businesses. New contributors are warmly encourage
+I am baking a open source erp for small and medium size businesses. New contributors are warmly encouraged
 
 
 ## Installation
@@ -42,7 +42,7 @@ If you face any problem raise issue
 
 ## Contributing
 
-1. Fork it (<https://github.com/attaprepos/BusinessBook>)
+1. Fork it (<https://github.com/attachaudhury/BusinessBook>)
 2. Create your feature branch (`git checkout -b feature/fooBar`)
 3. Commit your changes (`git commit -am 'Add some fooBar'`)
 4. Push to the branch (`git push origin feature/fooBar`)
