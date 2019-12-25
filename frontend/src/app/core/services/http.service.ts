@@ -162,40 +162,13 @@ export class HttpService {
   
 
     // #region category
-    
     categoryget(): Promise<any>  {
       return new Promise((resolve,reject)=>{this.http.get <{
           status: string,
           data: any
         }>(environment.apiUrl + "category")
         .subscribe(res => {
-          if (res.status == "success") {
-            resolve(res);
-          }
-          else{
-            reject();
-            this._snackBar.open("Cannot get categories", 'Close', {
-              duration: 6000,
-            });
-          }
-        })
-      })
-    }
-    categorygetarraytree(): Promise<any>  {
-      return new Promise((resolve,reject)=>{this.http.get <{
-          status: string,
-          data: any
-        }>(environment.apiUrl + "category/getarraytree")
-        .subscribe(res => {
-          if (res.status == "success") {
-            resolve(res);
-          }
-          else{
-            reject();
-            this._snackBar.open("Cannot get categories", 'Close', {
-              duration: 6000,
-            });
-          }
+          resolve(res);
         })
       })
     }
@@ -206,18 +179,29 @@ export class HttpService {
           data: any
         } > (environment.apiUrl + "category/add", data)
         .subscribe(res => {
-          if (res.status == "success") {
-            resolve(res);
-            this._snackBar.open("Item Added", 'Close', {
-              duration: 6000,
-            });
-          }
-          else{
-            reject();
-            this._snackBar.open("Item Not Added", 'Close', {
-              duration: 6000,
-            });
-          }
+          resolve(res);
+        });
+      });
+    }
+    categorydelete(data) {
+      return new Promise((resolve,reject)=>{
+        this.http.post <{
+          status: string,
+          data: any
+        } > (environment.apiUrl + "category/delete", data)
+        .subscribe(res => {
+          resolve(res);
+        })
+      });
+    }
+    categoryedit(data) {
+      return new Promise((resolve,reject)=>{
+        this.http.post <{
+          status: string,
+          data: any
+        } > (environment.apiUrl + "category/edit", data)
+        .subscribe(res => {
+          resolve(res);
         });
       });
     }

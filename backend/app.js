@@ -487,16 +487,6 @@ app.get("/api/user/getusersrolewise", checkAuth, async (req, res, next) => {
 
 //#region category
 app.get("/api/category", async (req, res, next) => {
-  console.log('category request');
-  
-  var result = await category.find({});
-  res.status(201).json({
-    status: "success",
-    data:result
-  })
-})
-app.get("/api/category/getarraytree", async (req, res, next) => {
-  console.log('category/gettree request');
   var result = await category.GetFullArrayTree();
   res.status(201).json({
     status: "success",
@@ -504,7 +494,6 @@ app.get("/api/category/getarraytree", async (req, res, next) => {
   })
 })
 app.post("/api/category/add",async (req, res, next) => {
-  console.log('category add request');
   try
   {
     if(!req.body.name){
@@ -540,6 +529,54 @@ app.post("/api/category/add",async (req, res, next) => {
     res.status(201).json({
       status: "failed",
       message:'item not saved!!',
+      ex:ex.message
+    });
+  }
+  
+})
+app.post("/api/category/delete",async (req, res, next) => {
+  console.log('category/delete request', req.body)
+  try
+  {
+    if(!req.body._id){
+      res.status(201).json({
+        status: "failed",
+        message:'Insufficient Data',
+      });
+    }
+
+    var result = await category.findOne({_id:req.body._id});
+    if(result){
+      var children = await result.getChildren();
+      if(children.length>0)
+      {
+        res.status(201).json({
+          status: "failed",
+          message:'This item has chidren, delete chldren first !'
+        })  
+      }
+      else{
+        var res = await category.remove({_id:req.body._id});
+        res.status(201).json({
+          status: "success",
+          data:result,
+        })
+      }
+      
+    }
+    else
+    {
+      res.status(201).json({
+        status: "failed",
+        message:'Item not saved!'
+      })
+    }
+  }catch(ex)
+  {
+    console.log(ex)
+    res.status(201).json({
+      status: "failed",
+      message:'Please Try Later!',
       ex:ex.message
     });
   }

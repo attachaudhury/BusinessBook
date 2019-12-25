@@ -1,56 +1,72 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { FormlyFieldConfig } from '@ngx-formly/core';
-
-import { ToastrService } from 'ngx-toastr';
+import { HttpService } from '@core';
+import { category } from '@shared/models/category';
+import { EasyColumn } from '@shared';
+import { EasyDialog } from '@shared';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material';
+import { DeleteConfirmationDialog } from '@shared/components/deleteconfimationdialog/deleteconfirmationdialog.component';
 
 @Component({
   selector: 'app-category-list',
   templateUrl: './list.component.html',
 })
 export class ListComponent implements OnInit {
-  form = new FormGroup({});
-  model = { email: 'email@gmail.com' };
-  fields: FormlyFieldConfig[] = [
-    {
-      key: 'text',
-      type: 'input',
-      templateOptions: {
-        label: 'Text',
-        placeholder: 'Type here to see the other field become enabled...',
-      },
-    },
-    {
-      key: 'text2',
-      type: 'input',
-      templateOptions: {
-        label: 'Hey!',
-        placeholder: 'This one is disabled if there is no text in the other input',
-      },
-      expressionProperties: {
-        'templateOptions.disabled': '!model.text',
-      },
-    },
-    {
-      key: 'email',
-      type: 'input',
-      templateOptions: {
-        label: 'Email address',
-        placeholder: 'Enter email',
-        required: true,
-      },
-    },
-  ];
-
-  constructor(private toastr: ToastrService) {}
-
-  ngOnInit() {}
-
-  submit() {
-    this.showToast();
+  categories:category[];
+  selectedobject;
+  constructor(
+    private httpService:HttpService,
+    private _snackBar: MatSnackBar,
+    public dialog: MatDialog,
+    private easyDialog: EasyDialog) {}
+  ngOnInit() {
+    this.getcategories();
   }
+  getcategories()
+  {
+    this.httpService.categoryget().then(res => {
+      if(res.status=="success")
+      {
+        this.categories = res.data
+      }
+    });
+  }
+  edit(item) {
 
-  showToast() {
-    this.toastr.success(JSON.stringify(this.model));
+    // if (this.loggedinuser.role == "agency" && user.role == "agency") {
+    //   this._snackBar.open("You can't delete this account", 'OK', { duration: 3000, });
+    //   return;
+    // }
+    // if (user.username == "admin") {
+    //   this._snackBar.open("You can't delete this account", 'OK', { duration: 3000, });
+    //   return;
+    // }
+    // this.usertodelete = user;
+    
+  }
+  async delete(item) {
+    this.selectedobject = item;
+    const dialogRef = this.dialog.open(DeleteConfirmationDialog, {
+      width: '250px'
+    });
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (result) {
+        var res  = await this.httpService.categorydelete({_id:this.selectedobject._id});
+        console.log(res);
+        if(res["status"]=="success")
+        {
+          this._snackBar.open("Operation Successful", 'Close', {
+            duration: 6000,
+          });
+          this.getcategories();
+        }
+        else{
+          this._snackBar.open("Operation Failed", 'Close', {
+            duration: 6000,
+          });
+        }
+      }
+    });
   }
 }
+

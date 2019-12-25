@@ -392,6 +392,11 @@
           "state": "add",
           "name": "Add Category",
           "type": "link"
+        },
+        {
+          "state": "list",
+          "name": "Category List",
+          "type": "link"
         }
       ]
     }

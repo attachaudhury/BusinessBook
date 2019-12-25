@@ -20,6 +20,7 @@ import { EasyProgressComponent } from './components/easy-progress/easy-progress.
 import { EasyDialogComponent } from './components/easy-dialog/easy-dialog.component';
 import { EasyTableComponent } from './components/easy-table/easy-table.component';
 import { EasyTableCellComponent } from './components/easy-table/easy-table-cell.component';
+import { DeleteConfirmationDialog } from './components/deleteconfimationdialog/deleteconfirmationdialog.component';
 
 const THIRD_MODULES = [
   MaterialModule,
@@ -33,6 +34,7 @@ const THIRD_MODULES = [
 ];
 const COMPONENTS = [
   BreadcrumbComponent,
+  DeleteConfirmationDialog,
   PageHeaderComponent,
   ErrorCodeComponent,
   Text3dComponent,
@@ -41,7 +43,7 @@ const COMPONENTS = [
   EasyTableComponent,
   EasyTableCellComponent,
 ];
-const COMPONENTS_DYNAMIC = [EasyDialogComponent];
+const COMPONENTS_DYNAMIC = [EasyDialogComponent,DeleteConfirmationDialog];
 const DIRECTIVES = [];
 const PIPES = [];
 
