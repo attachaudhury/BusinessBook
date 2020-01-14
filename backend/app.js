@@ -493,6 +493,41 @@ app.get("/api/category", async (req, res, next) => {
     data:result
   })
 })
+app.post("/api/category/getonebyid",async (req, res, next) => {
+  try
+  {
+    if(!req.body._id){
+      res.status(201).json({
+        status: "failed",
+        message:'Id empty',
+      });
+    }
+    
+    var result = await category.findOne({_id:req.body._id});
+    if(result){
+      res.status(201).json({
+        status: "success",
+        data:result,
+
+      })
+    }
+    else
+    {
+      res.status(201).json({
+        status: "failed",
+        message:'Item not found!'
+      })
+    }
+  }catch(ex)
+  {
+    res.status(201).json({
+      status: "failed",
+      message:'item not found!',
+      ex:ex.message
+    });
+  }
+  
+})
 app.post("/api/category/add",async (req, res, next) => {
   try
   {

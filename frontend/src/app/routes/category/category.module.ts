@@ -4,8 +4,9 @@ import { CategoryRoutingModule } from './category-routing.module';
 
 import { AddComponent } from './add/add.component';
 import { ListComponent } from './list/list.component';
+import { EditComponent } from './edit/edit.component';
 
-const COMPONENTS = [AddComponent, ListComponent];
+const COMPONENTS = [AddComponent, ListComponent,EditComponent];
 const COMPONENTS_DYNAMIC = [];
 
 @NgModule({

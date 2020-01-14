@@ -6,6 +6,8 @@ import { EasyDialog } from '@shared';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material';
 import { DeleteConfirmationDialog } from '@shared/components/deleteconfimationdialog/deleteconfirmationdialog.component';
+import { element } from 'protractor';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-category-list',
@@ -16,9 +18,9 @@ export class ListComponent implements OnInit {
   selectedobject;
   constructor(
     private httpService:HttpService,
-    private _snackBar: MatSnackBar,
+    private matsnackbar: MatSnackBar,
     public dialog: MatDialog,
-    private easyDialog: EasyDialog) {}
+    private easyDialog: EasyDialog,private router :Router) {}
   ngOnInit() {
     this.getcategories();
   }
@@ -27,24 +29,38 @@ export class ListComponent implements OnInit {
     this.httpService.categoryget().then(res => {
       if(res.status=="success")
       {
-        this.categories = res.data
+       this.categories =  this.flattreesarray(res.data);
       }
     });
   }
-  edit(item) {
+  flattreesarray(treesarray){
+    var flattedtree = [];
+    function recusrive(el)
+    {
+      flattedtree.push(el);
+      if(el["children"]){
+        el["children"].forEach(child => {
+          child.name = el.name+" > "+child.name;
+          recusrive(child);
+        });
+      }
+    }
+    treesarray.forEach(element => {
+      recusrive(element);
+    });
+    return flattedtree;
+  }
 
-    // if (this.loggedinuser.role == "agency" && user.role == "agency") {
-    //   this._snackBar.open("You can't delete this account", 'OK', { duration: 3000, });
-    //   return;
-    // }
-    // if (user.username == "admin") {
-    //   this._snackBar.open("You can't delete this account", 'OK', { duration: 3000, });
-    //   return;
-    // }
-    // this.usertodelete = user;
-    
+  edit(item) {
+    this.selectedobject = item;
+    this.router.navigate(['/category/edit',this.selectedobject._id]);
   }
   async delete(item) {
+    if(item["children"])
+    {
+      this.matsnackbar.open("Alert! Category has children, can't be deleted","Close",{duration:3000})
+      return false;
+    }
     this.selectedobject = item;
     const dialogRef = this.dialog.open(DeleteConfirmationDialog, {
       width: '250px'
@@ -55,13 +71,13 @@ export class ListComponent implements OnInit {
         console.log(res);
         if(res["status"]=="success")
         {
-          this._snackBar.open("Operation Successful", 'Close', {
+          this.matsnackbar.open("Operation Successful", 'Close', {
             duration: 6000,
           });
           this.getcategories();
         }
         else{
-          this._snackBar.open("Operation Failed", 'Close', {
+          this.matsnackbar.open("Operation Failed", 'Close', {
             duration: 6000,
           });
         }
