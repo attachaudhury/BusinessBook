@@ -587,11 +587,11 @@ app.post("/api/category/delete",async (req, res, next) => {
       {
         res.status(201).json({
           status: "failed",
-          message:'This item has chidren, delete chldren first !'
+          message:'This item has chidren, delete chlidren first !'
         })  
       }
       else{
-        var res = await category.remove({_id:req.body._id});
+        var result = await category.remove({_id:req.body._id});
         res.status(201).json({
           status: "success",
           data:result,
@@ -617,6 +617,208 @@ app.post("/api/category/delete",async (req, res, next) => {
   }
   
 })
+app.post("/api/category/edit",async (req, res, next) => {
+  console.log('category edit request');
+  console.log(req.body);
+  try
+  {
+    if(!req.body.name){
+      res.status(201).json({
+        status: "failed",
+        message:'Name empty',
+      });
+    }
+    if(!req.body._id){
+      res.status(201).json({
+        status: "failed",
+        message:'Name empty',
+      });
+    }
+
+    var result = await category.findByIdAndUpdate(req.body._id,{...req.body},{new:true});
+    if(result){
+      res.status(201).json({
+        status: "success",
+        data:result,
+      })
+    }
+    else
+    {
+      res.status(201).json({
+        status: "failed",
+        message:'Item not saved!'
+      })
+    }
+  }catch(ex)
+  {
+    res.status(201).json({
+      status: "failed",
+      message:'item not saved!!',
+      ex:ex.message
+    });
+  }
+  
+})
 //#endregion category
+
+//#region product
+app.get("/api/product", async (req, res, next) => {
+  var result = await product.find({});
+  res.status(201).json({
+    status: "success",
+    data:result
+  })
+})
+app.post("/api/product/getonebyid",async (req, res, next) => {
+  try
+  {
+    if(!req.body._id){
+      res.status(201).json({
+        status: "failed",
+        message:'Id empty',
+      });
+    }
+    
+    var result = await product.findOne({_id:req.body._id});
+    if(result){
+      res.status(201).json({
+        status: "success",
+        data:result,
+
+      })
+    }
+    else
+    {
+      res.status(201).json({
+        status: "failed",
+        message:'Item not found!'
+      })
+    }
+  }catch(ex)
+  {
+    res.status(201).json({
+      status: "failed",
+      message:'item not found!',
+      ex:ex.message
+    });
+  }
+  
+})
+app.post("/api/product/add",async (req, res, next) => {
+  try
+  {
+    if(!req.body.name){
+      res.status(201).json({
+        status: "failed",
+        message:'Name empty',
+      });
+    }
+    var obj = new product({
+      ...req.body
+    });
+    var result = await obj.save();
+    if(result){
+      res.status(201).json({
+        status: "success",
+        data:result,
+      })
+    }
+    else
+    {
+      res.status(201).json({
+        status: "failed",
+        message:'Item not saved!'
+      })
+    }
+  }catch(ex)
+  {
+    res.status(201).json({
+      status: "failed",
+      message:'item not saved!!',
+      ex:ex.message
+    });
+  }
+  
+})
+app.post("/api/product/delete",async (req, res, next) => {
+  console.log('product/delete request', req.body)
+  try
+  {
+    if(!req.body._id){
+      res.status(201).json({
+        status: "failed",
+        message:'Insufficient Data',
+      });
+    }
+
+    var result = await product.findOne({_id:req.body._id});
+    if(result){
+      var result = await product.remove({_id:req.body._id});
+        res.status(201).json({
+          status: "success",
+          data:result,
+        })
+    }
+    else
+    {
+      res.status(201).json({
+        status: "failed",
+        message:'Item not saved!'
+      })
+    }
+  }catch(ex)
+  {
+    console.log(ex)
+    res.status(201).json({
+      status: "failed",
+      message:'Please Try Later!',
+      ex:ex.message
+    });
+  }
+  
+})
+app.post("/api/product/edit",async (req, res, next) => {
+  console.log('product edit request');
+  console.log(req.body);
+  try
+  {
+    if(!req.body.name){
+      res.status(201).json({
+        status: "failed",
+        message:'Name empty',
+      });
+    }
+    if(!req.body._id){
+      res.status(201).json({
+        status: "failed",
+        message:'Id empty',
+      });
+    }
+
+    var result = await product.findByIdAndUpdate(req.body._id,{...req.body},{new:true});
+    if(result){
+      res.status(201).json({
+        status: "success",
+        data:result,
+      })
+    }
+    else
+    {
+      res.status(201).json({
+        status: "failed",
+        message:'Item not saved!'
+      })
+    }
+  }catch(ex)
+  {
+    res.status(201).json({
+      status: "failed",
+      message:'item not saved!!',
+      ex:ex.message
+    });
+  }
+  
+})
+//#endregion product
 
 module.exports = app;

@@ -70,6 +70,12 @@ const routes: Routes = [
         data: { title: 'Category', titleI18n: 'category' },
         canActivate: [AuthGuard],
       },
+      {
+        path: 'product',
+        loadChildren: () => import('./product/product.module').then(m => m.ProductModule),
+        data: { title: 'Product', titleI18n: 'product' },
+        canActivate: [AuthGuard],
+      },
     ],
   },
   {

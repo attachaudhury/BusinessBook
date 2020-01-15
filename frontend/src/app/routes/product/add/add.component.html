@@ -1,0 +1,32 @@
+<page-header></page-header>
+
+<div fxLayout="row wrap" class="matero-row">
+  <div fxFlex="100" fxFlex.lt-sm="100" class="matero-col">
+    <mat-card>
+      <mat-card-title>Category</mat-card-title>
+      <form [formGroup]="reactiveForm2" class="matero-form-horizontal">
+        <div fxLayout="row wrap" fxLayoutGap="8px grid">
+          <div fxFlex="50" fxFlex.lt-sm="100">
+            <mat-form-field>
+              <mat-label>Name</mat-label>
+              <input matInput placeholder="Category Name" formControlName="name"
+                     required>
+              <mat-error *ngIf="reactiveForm2.get('name').invalid">Please enter category name
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex="50" fxFlex.lt-sm="100">
+            <mat-form-field>
+              <mat-label>Parent</mat-label>
+              <mat-select formControlName="parentId" >
+                <mat-option>-- None --</mat-option>
+                <mat-option  *ngFor="let cat of categories" value="{{cat._id}}">{{cat.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <button type="button" (click)="save()" mat-raised-button color="primary" class="m-t-8">Save</button>
+      </form>
+    </mat-card>
+  </div>
+</div>

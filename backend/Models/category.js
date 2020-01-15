@@ -5,4 +5,4 @@ const category = mongoose.Schema({
     name:String
 })
 category.plugin(materializedPlugin);
-module.exports = mongoose.model('category',category);
+module.exports = mongoose.model('category',category,'category');

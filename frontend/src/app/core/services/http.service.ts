@@ -162,7 +162,7 @@ export class HttpService {
   
 
     // #region category
-    categoryget(): Promise<any>  {
+    categoryget()  {
       return new Promise((resolve,reject)=>{this.http.get <{
           status: string,
           data: any
@@ -172,7 +172,7 @@ export class HttpService {
         })
       })
     }
-    categorygetonebyid(data): Promise<any>  {
+    categorygetonebyid(data) {
       return new Promise((resolve,reject)=>{this.http.post<{
           status: string,
           data: any
@@ -216,4 +216,61 @@ export class HttpService {
       });
     }
     // #endregion category
+
+
+    // #region product
+    productget()  {
+      return new Promise((resolve,reject)=>{this.http.get <{
+          status: string,
+          data: any
+        }>(environment.apiUrl + "product")
+        .subscribe(res => {
+          resolve(res);
+        })
+      })
+    }
+    productgetonebyid(data) {
+      return new Promise((resolve,reject)=>{this.http.post<{
+          status: string,
+          data: any
+        }>(environment.apiUrl + "product/getonebyid",data)
+        .subscribe(res => {
+          resolve(res);
+        })
+      })
+    }
+    productadd(data) {
+      return new Promise((resolve,reject)=>{
+        this.http.post <{
+          status: string,
+          data: any
+        } > (environment.apiUrl + "product/add", data)
+        .subscribe(res => {
+          resolve(res);
+        });
+      });
+    }
+    productdelete(data) {
+      return new Promise((resolve,reject)=>{
+        this.http.post <{
+          status: string,
+          data: any
+        } > (environment.apiUrl + "product/delete", data)
+        .subscribe(res => {
+          resolve(res);
+        })
+      });
+    }
+    productedit(data) {
+      return new Promise((resolve,reject)=>{
+        this.http.post <{
+          status: string,
+          data: any
+        } > (environment.apiUrl + "product/edit", data)
+        .subscribe(res => {
+          resolve(res);
+        });
+      });
+    }
+    // #endregion product
 }

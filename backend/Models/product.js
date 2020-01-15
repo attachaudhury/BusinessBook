@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 const product = mongoose.Schema({
-    categories:[{type:mongoose.Schema.Types.ObjectId,ref:"category"}],
+    categories:[{type:String}],
     description:{type:String,required:false},
     images:[{type:String}],
-    largequantityprice:[{quantity:Number,price:Number}],
-    moq:{type:Number,required:false},
     name:{type:String,required:true},
-    price:{type:Number,required:true},
+    purchaseprice:{type:Number},
+    quantity:{type:Number,default:0},
+    saleprice:{type:Number},
 })
-module.exports = mongoose.model('product',product);
+module.exports = mongoose.model('product',product,'product');

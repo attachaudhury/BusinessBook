@@ -386,7 +386,7 @@
       "state": "category",
       "name": "Category",
       "type": "sub",
-      "icon": "widgets",
+      "icon": "category",
       "children": [
         {
           "state": "add",
@@ -396,6 +396,24 @@
         {
           "state": "list",
           "name": "Category List",
+          "type": "link"
+        }
+      ]
+    },
+    {
+      "state": "product",
+      "name": "Product",
+      "type": "sub",
+      "icon": "store",
+      "children": [
+        {
+          "state": "add",
+          "name": "Add Product",
+          "type": "link"
+        },
+        {
+          "state": "list",
+          "name": "Product List",
           "type": "link"
         }
       ]
