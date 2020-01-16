@@ -417,6 +417,16 @@
           "type": "link"
         }
       ]
+    },
+    {
+      "state": "pos",
+      "name": "POS",
+      "type": "link",
+      "icon": "shop",
+      "badge": {
+        "color": "green-500",
+        "value": "5"
+      }
     }
   ]
 }

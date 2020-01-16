@@ -8,6 +8,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './sessions/login/login.component';
 import { RegisterComponent } from './sessions/register/register.component';
 import { AuthGuard } from '@shared/guard/auth.guard';
+import { PosComponent } from './pos/pos.component';
 
 const routes: Routes = [
   {
@@ -74,6 +75,12 @@ const routes: Routes = [
         path: 'product',
         loadChildren: () => import('./product/product.module').then(m => m.ProductModule),
         data: { title: 'Product', titleI18n: 'product' },
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'pos',
+        component: PosComponent,
+        data: { title: 'POS', titleI18n: 'pos' },
         canActivate: [AuthGuard],
       },
     ],
