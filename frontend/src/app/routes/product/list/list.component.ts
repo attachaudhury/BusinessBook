@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpService } from '@core';
-import { category } from '@shared/models/category';
+import { product } from '@shared/models/product';
 import { EasyColumn } from '@shared';
 import { EasyDialog } from '@shared';
 import { MatDialog } from '@angular/material/dialog';
@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
   templateUrl: './list.component.html',
 })
 export class ListComponent implements OnInit {
-  categories:category[];
+  model:product[];
   selectedobject;
   constructor(
     private httpService:HttpService,
@@ -22,59 +22,39 @@ export class ListComponent implements OnInit {
     public dialog: MatDialog,
     private easyDialog: EasyDialog,private router :Router) {}
   ngOnInit() {
-    this.getcategories();
+    this.getpagedata();
   }
-  getcategories()
+  getpagedata()
   {
-    this.httpService.categoryget().then(res => {
-      if(res.status=="success")
+    this.httpService.productget().then(res => {
+      console.log('loaded getpagedata');
+      console.log(res);
+      if(res["status"]=="success")
       {
-       this.categories =  this.flattreesarray(res.data);
+       this.model =  res["data"];
       }
     });
-  }
-  flattreesarray(treesarray){
-    var flattedtree = [];
-    function recusrive(el)
-    {
-      flattedtree.push(el);
-      if(el["children"]){
-        el["children"].forEach(child => {
-          child.name = el.name+" > "+child.name;
-          recusrive(child);
-        });
-      }
-    }
-    treesarray.forEach(element => {
-      recusrive(element);
-    });
-    return flattedtree;
   }
 
   edit(item) {
     this.selectedobject = item;
-    this.router.navigate(['/category/edit',this.selectedobject._id]);
+    this.router.navigate(['/product/edit',this.selectedobject._id]);
   }
   async delete(item) {
-    if(item["children"])
-    {
-      this.matsnackbar.open("Alert! Category has children, can't be deleted","Close",{duration:3000})
-      return false;
-    }
     this.selectedobject = item;
     const dialogRef = this.dialog.open(DeleteConfirmationDialog, {
       width: '250px'
     });
     dialogRef.afterClosed().subscribe(async (result) => {
       if (result) {
-        var res  = await this.httpService.categorydelete({_id:this.selectedobject._id});
+        var res  = await this.httpService.productdelete({_id:this.selectedobject._id});
         console.log(res);
         if(res["status"]=="success")
         {
           this.matsnackbar.open("Operation Successful", 'Close', {
             duration: 6000,
           });
-          this.getcategories();
+          this.getpagedata();
         }
         else{
           this.matsnackbar.open("Operation Failed", 'Close', {

@@ -27,9 +27,9 @@ export class ListComponent implements OnInit {
   getcategories()
   {
     this.httpService.categoryget().then(res => {
-      if(res.status=="success")
+      if(res["status"]=="success")
       {
-       this.categories =  this.flattreesarray(res.data);
+       this.categories =  this.flattreesarray(res["data"]);
       }
     });
   }

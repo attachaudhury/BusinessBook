@@ -37,9 +37,9 @@ export class AddComponent implements OnInit {
     this.httpService.categoryget().then(res => {
       console.log('category in add');
       console.log(res);
-      if(res.status=="success")
+      if(res['status']=="success")
       {
-        this.categories = res.data
+        this.categories = res["data"]
       }
     });
   }

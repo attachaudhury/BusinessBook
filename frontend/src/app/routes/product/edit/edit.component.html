@@ -4,17 +4,48 @@
   <div fxFlex="100" fxFlex.lt-sm="100" class="matero-col">
     <mat-card>
       <mat-card-title>Category</mat-card-title>
-      <form [formGroup]="reactiveForm2" class="matero-form-horizontal">
+      <form *ngIf="model" class="matero-form-horizontal">
         <div fxLayout="row wrap" fxLayoutGap="8px grid">
           <div fxFlex="50" fxFlex.lt-sm="100">
             <mat-form-field>
               <mat-label>Name</mat-label>
-              <input matInput placeholder="Category Name" formControlName="name"
-                     required>
-              <mat-error *ngIf="reactiveForm2.get('name').invalid">Please enter category name
-              </mat-error>
+              <input matInput placeholder="Product Name" [(ngModel)]="model.name" name="name">
             </mat-form-field>
           </div>
+          <div fxFlex="50" fxFlex.lt-sm="100">
+            <mat-form-field>
+              <mat-label>Categories</mat-label>
+              <mat-select [(ngModel)]="model.categories" name="categories" multiple>
+                <mat-option  *ngFor="let cat of categories" value="{{cat._id}}">{{cat.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          
+          <div fxFlex="50" fxFlex.lt-sm="100">
+            <mat-form-field>
+              <mat-label>description</mat-label>
+              <input matInput placeholder="description" [(ngModel)]="model.description" name="description">
+            </mat-form-field>
+          </div>
+          <div fxFlex="50" fxFlex.lt-sm="100">
+            <mat-form-field>
+              <mat-label>purchaseprice</mat-label>
+              <input matInput placeholder="purchaseprice" [(ngModel)]="model.purchaseprice" name="purchaseprice">
+            </mat-form-field>
+          </div>
+          <div fxFlex="50" fxFlex.lt-sm="100">
+            <mat-form-field>
+              <mat-label>quantity</mat-label>
+              <input matInput placeholder="quantity" [(ngModel)]="model.quantity" name="quantity">
+            </mat-form-field>
+          </div>
+          <div fxFlex="50" fxFlex.lt-sm="100">
+            <mat-form-field>
+              <mat-label>saleprice</mat-label>
+              <input matInput placeholder="saleprice" [(ngModel)]="model.saleprice" name="saleprice">
+            </mat-form-field>
+          </div>
+
         </div>
         <button type="button" (click)="save()" mat-raised-button color="primary" class="m-t-8">Update</button>
       </form>

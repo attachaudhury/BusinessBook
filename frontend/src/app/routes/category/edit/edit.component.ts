@@ -29,9 +29,9 @@ export class EditComponent implements OnInit {
   }
   async loadpagedata() {
     var requestresponse = await this.httpService.categorygetonebyid({ _id: this.selectedid });
-    if (requestresponse.status == "success") {
+    if (requestresponse["status"] == "success") {
       
-      this.selecteditem = requestresponse.data;
+      this.selecteditem = requestresponse["data"];
       this.reactiveForm2.setValue({name:this.selecteditem['name']})
     console.log(this.selecteditem)
     }

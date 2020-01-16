@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var mongoose = require("mongoose")
 var user = require('./Models/user')
 var category = require('./Models/category')
+var product = require('./Models/product')
 var checkAuth = require("./middleware/check-auth")
 var app = express();
 var multiparty = require('multiparty');
@@ -663,11 +664,24 @@ app.post("/api/category/edit",async (req, res, next) => {
 
 //#region product
 app.get("/api/product", async (req, res, next) => {
+  console.log('/api/product')
+  try
+  {
+    var result = await product.find({});
+    res.status(201).json({
+      status: "success",
+      data:result
+    })
+  }catch(Exception)
+  {
+    res.status(201).json({
+      status: "failed",
+      message:'can not get result',
+      ex:Exception.message,
+    })
+  }
   var result = await product.find({});
-  res.status(201).json({
-    status: "success",
-    data:result
-  })
+  
 })
 app.post("/api/product/getonebyid",async (req, res, next) => {
   try
