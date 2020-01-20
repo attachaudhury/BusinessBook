@@ -254,19 +254,6 @@
       ]
     },
     {
-      "state": "media",
-      "name": "Media",
-      "type": "sub",
-      "icon": "image",
-      "children": [
-        {
-          "state": "gallery",
-          "name": "Gallery",
-          "type": "link"
-        }
-      ]
-    },
-    {
       "state": "forms",
       "name": "Forms",
       "type": "sub",
@@ -290,28 +277,6 @@
       ]
     },
     {
-      "state": "tables",
-      "name": "Tables",
-      "type": "sub",
-      "icon": "format_line_spacing",
-      "label": {
-        "color": "indigo-500",
-        "value": "new"
-      },
-      "children": [
-        {
-          "state": "basic",
-          "name": "Basic Table",
-          "type": "link"
-        },
-        {
-          "state": "advanced",
-          "name": "Advanced Table",
-          "type": "link"
-        }
-      ]
-    },
-    {
       "state": "profile",
       "name": "Profile",
       "type": "sub",
@@ -325,23 +290,6 @@
         {
           "state": "settings",
           "name": "Settings",
-          "type": "link"
-        }
-      ]
-    },
-    {
-      "state": "extensions",
-      "name": "Extensions",
-      "type": "sub",
-      "icon": "extension",
-      "label": {
-        "color": "indigo-500",
-        "value": "new"
-      },
-      "children": [
-        {
-          "state": "dialog",
-          "name": "Dialog",
           "type": "link"
         }
       ]

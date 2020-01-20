@@ -1,5 +1,6 @@
 export interface product{
   _id?:string;
+  barcode?:string;
   categories?:string[];
   description?:string;
   images?:string[];

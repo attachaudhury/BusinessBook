@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const product = mongoose.Schema({
+    barcode:{type:String},
     categories:[{type:String}],
-    description:{type:String,required:false},
+    description:{type:String},
     images:[{type:String}],
     name:{type:String,required:true},
     purchaseprice:{type:Number},

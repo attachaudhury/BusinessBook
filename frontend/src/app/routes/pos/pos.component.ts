@@ -1,20 +1,14 @@
-import {
-  Component,
-  OnInit,
-  AfterViewInit,
-  OnDestroy,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  NgZone,
-} from '@angular/core';
+import { Component, OnInit, } from '@angular/core';
 
-import { PosService } from './pos.service';
 import { HttpService } from '@core';
 import { product } from '@shared/models/product';
+import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
+  selector: 'app-pos',
+  templateUrl: './pos.component.html',
   styles: [
     `
       .mat-raised-button {
@@ -23,47 +17,74 @@ import { product } from '@shared/models/product';
       }
     `,
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [PosService],
 })
-export class PosComponent implements OnInit, AfterViewInit, OnDestroy {
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = this.dashboardSrv.getData();
+export class PosComponent implements OnInit {
+  searchtextcontrol = new FormControl();
+  filteredproducts: product[] = [];
+  products: product[] = [];
+  cart: product[] = [];
+  carttotal:number=0.0;
+  selectedproduct:product=null;
+  constructor(private httpservice: HttpService, ) {
 
-  messages = this.dashboardSrv.getMessages();
-
-  charts = this.dashboardSrv.getCharts();
-  chart1 = null;
-  chart2 = null;
-
-  products:product[];
-
-  constructor(
-    private dashboardSrv: PosService,
-    private ngZone: NgZone,
-    private cdr: ChangeDetectorRef,
-    private httpservice:HttpService
-  ) {}
-
-  ngOnInit() {}
-
-  ngAfterViewInit() {
-    this.ngZone.runOutsideAngular(() => this.initChart());
   }
-
-  ngOnDestroy() {
-    if (this.chart1) {
-      this.chart1.destroy();
-    }
-    if (this.chart2) {
-      this.chart2.destroy();
+  ngOnInit() {
+    this.getpagedata();
+    this.searchtextcontrol.valueChanges.subscribe(val => {
+      this.selectedproduct = null;
+      var tmpproducts = this.products.filter(el => {
+        if (el.name.toLowerCase().includes(val.toLowerCase())) {
+          return el;
+        }
+      })
+      this.filteredproducts = tmpproducts.splice(0, 5);
+    })
+  }
+  getpagedata() {
+    this.httpservice.productget().then(res => {
+      if (res["status"] == "success") {
+        this.products = res["data"];
+      }
+    });
+  }
+  searchtextcontrolselectedoption(event: any) {
+    this.selectedproduct = null;
+    const selectedValue = event.option.value;
+    for (let index = 0; index < this.filteredproducts.length; index++) {
+      const product = this.filteredproducts[index];
+      if (product.name == selectedValue) {
+        var tmpproduct = { _id: product._id, name: product.name, barcode: product.barcode, saleprice: product.saleprice, quantity: 1, total: product.saleprice };
+        this.selectedproduct = tmpproduct;
+         break;
+      }
     }
   }
-
-  initChart() {
-    this.chart1 = new ApexCharts(document.querySelector('#chart1'), this.charts[0]);
-    this.chart1.render();
-    this.chart2 = new ApexCharts(document.querySelector('#chart2'), this.charts[1]);
-    this.chart2.render();
+  searchtextcontrolkeydown(eventkey){
+    if(eventkey=="Enter" && this.selectedproduct!=null)
+    {
+      this.addproducttocart(this.selectedproduct);
+    }
+  }
+  addproducttocart(product: product) {
+    var tmpproduct = { _id: product._id, name: product.name, barcode: product.barcode, saleprice: product.saleprice, quantity: 1, total: product.saleprice };
+    this.selectedproduct = tmpproduct;
+    for (let index = 0; index < this.cart.length; index++) {
+      const element = this.cart[index];
+      if (element._id == tmpproduct._id) {
+        element.quantity += 1;
+        element['total'] = element.quantity * element.saleprice;
+        this.cart = [...this.cart];
+        this.updatecarttotal();
+        return false;
+      }
+    }
+    this.cart.push(tmpproduct);
+    this.cart = [...this.cart];
+    this.updatecarttotal();
+  }
+  updatecarttotal(){
+    var tmptotal = 0.0;
+    this.cart.map(el=>{tmptotal+=el['total']});
+    this.carttotal= tmptotal;
   }
 }
