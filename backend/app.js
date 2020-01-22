@@ -835,4 +835,24 @@ app.post("/api/product/edit",async (req, res, next) => {
 })
 //#endregion product
 
+
+app.post("/api/pos/sale",async (req, res, next) => {
+  try
+  {
+    console.log('pos/sale');
+    res.status(201).json({
+      status: "success",
+      data:req.body,
+    })
+  }catch(ex)
+  {
+    res.status(201).json({
+      status: "failed",
+      message:'item not found!',
+      ex:ex.message
+    });
+  }
+  
+})
+
 module.exports = app;

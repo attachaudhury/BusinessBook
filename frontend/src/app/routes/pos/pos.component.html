@@ -16,7 +16,7 @@
   </div>
   <div class="matero-col" fxFlex.gt-sm="50" fxFlex="100">
     <mat-card>
-      <table class="w-full" mat-table [dataSource]="cart.reverse()">
+      <table class="w-full" mat-table [dataSource]="cart">
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef> Name </th>
           <td mat-cell *matCellDef="let element"> {{element.name}} </td>

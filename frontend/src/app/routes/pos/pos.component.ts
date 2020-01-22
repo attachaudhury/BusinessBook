@@ -5,6 +5,7 @@ import { product } from '@shared/models/product';
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-pos',
@@ -25,7 +26,7 @@ export class PosComponent implements OnInit {
   cart: product[] = [];
   carttotal:number=0.0;
   selectedproduct:product=null;
-  constructor(private httpservice: HttpService, ) {
+  constructor(private httpservice: HttpService,private matsnackbar: MatSnackBar ) {
 
   }
   ngOnInit() {
@@ -59,18 +60,33 @@ export class PosComponent implements OnInit {
       }
     }
   }
-  searchtextcontrolkeydown(eventkey){
+  async searchtextcontrolkeydown(eventkey){
     if(eventkey=="Enter" && this.selectedproduct!=null)
     {
+      console.log(eventkey);
       this.addproducttocart(this.selectedproduct);
+    }
+    else if(eventkey=="Delete" && this.selectedproduct!=null)
+    {
+      console.log(eventkey);
+      this.deleteproductfromcart(this.selectedproduct);
+    }
+    else if(eventkey=="Shift" && this.selectedproduct!=null)
+    {
+      console.log(eventkey);
+    }
+    else if(eventkey=="End" && this.cart.length>0)
+    {
+      this.matsnackbar.open('Sale in process','Close',{})
+      var salestatus = await this.httpservice.possale({list:this.cart})
+      console.log(salestatus);
     }
   }
   addproducttocart(product: product) {
-    var tmpproduct = { _id: product._id, name: product.name, barcode: product.barcode, saleprice: product.saleprice, quantity: 1, total: product.saleprice };
-    this.selectedproduct = tmpproduct;
+    this.selectedproduct= product;
     for (let index = 0; index < this.cart.length; index++) {
       const element = this.cart[index];
-      if (element._id == tmpproduct._id) {
+      if (element._id == product._id) {
         element.quantity += 1;
         element['total'] = element.quantity * element.saleprice;
         this.cart = [...this.cart];
@@ -78,9 +94,21 @@ export class PosComponent implements OnInit {
         return false;
       }
     }
-    this.cart.push(tmpproduct);
+    this.cart.push(product);
     this.cart = [...this.cart];
     this.updatecarttotal();
+  }
+  deleteproductfromcart(product: product) {
+    for (let index = 0; index < this.cart.length; index++) {
+      const element = this.cart[index];
+      if (element._id == product._id) {
+        var tmpcart = [...this.cart];
+        tmpcart.splice(index,1)
+        this.cart = [...tmpcart];
+        this.updatecarttotal();
+        break;
+      }
+    }
   }
   updatecarttotal(){
     var tmptotal = 0.0;
