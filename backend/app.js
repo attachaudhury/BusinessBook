@@ -8,7 +8,9 @@ var mongoose = require("mongoose")
 var user = require('./Models/user')
 var category = require('./Models/category')
 var product = require('./Models/product')
-var checkAuth = require("./middleware/check-auth")
+var financeaccount = require('./Models/financeaccount')
+var financetransaction = require('./Models/financetransaction')
+var checkAuth = require("./middleware/check-auth");
 var app = express();
 var multiparty = require('multiparty');
 mongoose.connect('mongodb://localhost:27017/businessbook', {
@@ -36,6 +38,9 @@ app.use(express.static("public"));
 async function dbsetting() {
   await user.remove({});
   await category.remove({});
+  await product.remove({});
+  await financeaccount.remove({});
+  await financetransaction.remove({});
   user.findOne({
     username: 'admin',
     role: 'admin'
@@ -88,6 +93,13 @@ async function dbsetting() {
   
   var cl = new category({name: "Clothes"});
   await cl.save();
+  
+
+  // assets account
+  var bankaccount = await financeaccount.create({name:'cash',type:'asset'});
+  var inventoryaccount = await financeaccount.create({name:'inventory',type:'asset'});
+  var posaccount = await financeaccount.create({name:'pos sale',type:'income'});
+  var posaccount = await financeaccount.create({name:'cost of goods sold',type:'expence'});
   
 }
 app.get("/", (req, res, next) => {
@@ -836,10 +848,25 @@ app.post("/api/product/edit",async (req, res, next) => {
 //#endregion product
 
 
-app.post("/api/pos/sale",async (req, res, next) => {
+app.post("/api/pos/sale",checkAuth,async (req, res, next) => {
   try
   {
     console.log('pos/sale');
+    var soldproducts = res.body.data.list;
+    var soldproducttotal = soldproducts.reduce(function(total,currentvale){
+      return total+currentvalue.total;
+    },0);
+    var possaleaccount = await financeaccount.findOne({name:"pos sale"});
+    var cashaccount = await financeaccount.findOne({name:"cash"});
+    var inventoryaccount = await financeaccount.findOne({name:"invertory"});
+    var cgseaccount = await financeaccount.findOne({name:"cost of goods sold"});
+    
+    console.log(soldproducttotal);
+    console.log(possaleaccount);
+    console.log(cashaccount);
+    console.log(inventoryaccount);
+    console.log(cgseaccount);
+
     res.status(201).json({
       status: "success",
       data:req.body,
