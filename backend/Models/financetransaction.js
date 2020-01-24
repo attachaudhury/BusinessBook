@@ -4,12 +4,12 @@ materializedPlugin = require('mongoose-materialized')
 const financetransaction = mongoose.Schema({
     amount:Number,
     createdata:{type:Date,default:Date.now()},
+    description:String,
     financeaccount:{type:mongoose.Schema.ObjectId,ref:"financeaccount"},
-    name:String,
+    group:{type:mongoose.Schema.ObjectId,ref:"user"},
     others:[{key:String,value:String}],
     soldproducts:[{_id:{type:mongoose.Schema.ObjectId,ref:"product"},name:String,saleprice:Number,quantity:Number,total:Number}],
     status:String,
     user:{type:mongoose.Schema.ObjectId,ref:"user"},
 })
-financetransaction.plugin(materializedPlugin);
 module.exports = mongoose.model('financetransaction',financetransaction,'financetransaction');
