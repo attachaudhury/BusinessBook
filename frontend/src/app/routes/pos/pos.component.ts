@@ -3,7 +3,7 @@ import { Component, OnInit, } from '@angular/core';
 import { HttpService } from '@core';
 import { product } from '@shared/models/product';
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material';
 
@@ -21,25 +21,38 @@ import { MatSnackBar } from '@angular/material';
 })
 export class PosComponent implements OnInit {
   searchtextcontrol = new FormControl();
+  searchtextcontrolvaluechangesubsscription:Subscription;
   filteredproducts: product[] = [];
   products: product[] = [];
   cart: product[] = [];
   carttotal:number=0.0;
+  scanningmode=false;
   selectedproduct:product=null;
   constructor(private httpservice: HttpService,private matsnackbar: MatSnackBar ) {
 
   }
   ngOnInit() {
     this.getpagedata();
-    this.searchtextcontrol.valueChanges.subscribe(val => {
-      this.selectedproduct = null;
-      var tmpproducts = this.products.filter(el => {
-        if (el.name.toLowerCase().includes(val.toLowerCase())) {
-          return el;
-        }
+    this.changesearchmode({checked:false});
+  }
+  changesearchmode(event){
+    this.scanningmode =event.checked;
+    if(this.scanningmode)
+    {
+      this.searchtextcontrolvaluechangesubsscription.unsubscribe();
+      this.filteredproducts=[]
+    }
+    else{
+      this.searchtextcontrolvaluechangesubsscription = this.searchtextcontrol.valueChanges.subscribe(val => {
+        this.selectedproduct = null;
+        var tmpproducts = this.products.filter(el => {
+          if (el.name.toLowerCase().includes(val.toLowerCase())) {
+            return el;
+          }
+        })
+        this.filteredproducts = tmpproducts.splice(0, 5);
       })
-      this.filteredproducts = tmpproducts.splice(0, 5);
-    })
+    }
   }
   getpagedata() {
     this.httpservice.productget().then(res => {
@@ -61,7 +74,11 @@ export class PosComponent implements OnInit {
     }
   }
   async searchtextcontrolkeydown(eventkey){
-    if(eventkey=="Enter" && this.selectedproduct!=null)
+    if(this.scanningmode){
+      console.log(this.searchtextcontrol)
+    }else
+    {
+      if(eventkey=="Enter" && this.selectedproduct!=null)
     {
       console.log(eventkey);
       this.addproducttocart(this.selectedproduct);
@@ -81,6 +98,8 @@ export class PosComponent implements OnInit {
       var salestatus = await this.httpservice.possale({list:this.cart})
       console.log(salestatus);
     }
+    }
+    
   }
   addproducttocart(product: product) {
     this.selectedproduct= product;
