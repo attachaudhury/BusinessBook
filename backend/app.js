@@ -221,45 +221,6 @@ app.post("/api/user/updateprofileimage", checkAuth, async (req, res, next) => {
     })
   }
 })
-app.post("/api/user/updatecompanyimage", checkAuth, async (req, res, next) => {
-  try {
-    var form = new multiparty.Form();
-    form.parse(req, async function (err, fields, files) {
-      var companyimage = files.files[0];
-      var companyimagename = "/companyimage/" + Date.now() + ".png";
-      fse.moveSync(companyimage.path, "public" + companyimagename, {
-        overwrite: true
-      })
-      user.findOneAndUpdate({
-        _id: req.userid
-      }, {
-        "companyimage": companyimagename
-      }, {
-        new: true
-      })
-        .then(result => {
-          console.log(result)
-          res.status(201).json({
-            status: "success",
-            data: result
-          });
-        }).catch(err => {
-          console.log(err)
-          res.status(201).json({
-            status: "failed",
-            message:"Not saved..",
-            ex:err.message
-          });
-        })
-    })
-  } catch (ex) {
-    res.status(201).json({
-      status: "failed",
-      message: 'Not saved.....',
-      ex: ex.message
-    })
-  }
-})
 app.post("/api/user/add", checkAuth, async (req, res, next) => {
   try {
     console.log('adduser request');
@@ -267,7 +228,7 @@ app.post("/api/user/add", checkAuth, async (req, res, next) => {
     var username = req.body.username || '';
     var password = req.body.password || '';
     var role = req.body.role || '';
-    var agency = req.body.agency || null;
+    var department = req.body.department || null;
 
     if (username == '' || password == '' || role == '') {
       res.status(201).json({
@@ -276,36 +237,36 @@ app.post("/api/user/add", checkAuth, async (req, res, next) => {
       })
       return;
     }
-    if (role == 'user' && agency == null) {
+    if (role == 'user' && department == null) {
       res.status(201).json({
         status: "failed",
-        message: 'Agency not specified for user',
+        message: 'department not specified for user',
       })
       return;
     }
-    if (role == 'agency' && agency != null) {
+    if (role == 'agency' && department != null) {
       res.status(201).json({
         status: "failed",
-        message: 'Agency specified for agency account',
+        message: 'department specified for department account',
       })
       return;
     }
-    if (role == 'admin' && agency != '') {
+    if (role == 'admin' && department != '') {
       res.status(201).json({
         status: "failed",
-        message: 'Agency specified for admin account',
+        message: 'department specified for admin account',
       })
       return;
     }
     // res.status(201).json({
-    //   status: "test",
+    //   status: "success",
     //   data:req.body,
     //   message: 'ok',
     // })
     // return;
     var newuser = new user({
       address: req.body.address,
-      agency: agency,
+      department: department,
       companyname: req.body.companyname,
       companyimage: "/companyimage/defaultcompanyimage.png",
       createddate: Date.now(),
@@ -323,7 +284,7 @@ app.post("/api/user/add", checkAuth, async (req, res, next) => {
       profileimage: "/profileimage/defaultprofileimage.png",
       role: role,
       title: req.body.title,
-      username: req.body.username,
+      username: username,
       workphone: req.body.workphone,
       website: req.body.website,
     })
@@ -432,28 +393,7 @@ app.post("/api/user/delete", checkAuth, async (req, res, next) => {
     })
   }
 })
-app.get("/api/user/getdepartments", async (req, res, next) => {
-  console.log('getdepartments request');
-  try {
-    user.find({ role: 'department' }).then(result => {
-      res.status(201).json({
-        status: "success",
-        data: result
-      });
-    }).catch(err => {
-      res.status(201).json({
-        status: "failed"
-      });
-    })
-  } catch (ex) {
-    res.status(201).json({
-      status: "failed",
-      message: 'Not saved..',
-      ex: ex.message,
-    })
-  }
-})
-app.get("/api/user/getusersrolewise", checkAuth, async (req, res, next) => {
+app.get("/api/user/getrolewise", checkAuth, async (req, res, next) => {
   console.log('getusersrolewise request');
   try {
     var loadeduser = await user.findOne({ _id: req.userid });
@@ -491,6 +431,27 @@ app.get("/api/user/getusersrolewise", checkAuth, async (req, res, next) => {
         data: []
       });
     }
+  } catch (ex) {
+    res.status(201).json({
+      status: "failed",
+      message: 'Not saved..',
+      ex: ex.message,
+    })
+  }
+})
+app.get("/api/user/getdepartments", async (req, res, next) => {
+  console.log('getdepartments request');
+  try {
+    user.find({ role: 'department' }).then(result => {
+      res.status(201).json({
+        status: "success",
+        data: result
+      });
+    }).catch(err => {
+      res.status(201).json({
+        status: "failed"
+      });
+    })
   } catch (ex) {
     res.status(201).json({
       status: "failed",

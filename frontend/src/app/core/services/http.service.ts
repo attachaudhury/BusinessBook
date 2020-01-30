@@ -110,53 +110,37 @@ export class HttpService {
           }
         })
     }
-    updatecompanyimage(companyimage) {
-      const uploadData = new FormData();
-      uploadData.append('files', companyimage);
-      this.http.post < {
-          status: string,
-          data: any
-        } > (environment.apiUrl + "user/updatecompanyimage", uploadData)
-        .subscribe(res => {
-          console.log(res);
-          if (res.status == "success") {
-            this.user.companyimage = res.data.companyimage;
-            localStorage.setItem("user", JSON.stringify(this.user));
-            this.userlistener.next(this.user);
-          }
-        })
-    }
-    updatebrandimage(companyimage) {
-      const uploadData = new FormData();
-      uploadData.append('files', companyimage);
-      this.http.post < {
-          status: string,
-          data: any
-        } > (environment.apiUrl + "user/updatebrandimage", uploadData)
-        .subscribe(res => {
-          console.log(res);
-          if (res.status == "success") {
-            this.user.brandimage = res.data.brandimage;
-            localStorage.setItem("user", JSON.stringify(this.user));
-            this.userlistener.next(this.user);
-          }
-        })
-    }
-    adduser(newdataobject) {
-      var data = newdataobject
-      this.http.post < {
+    useradd(data) {
+      return new Promise((resolve,reject)=>{
+        this.http.post < {
           status: string,
           data: any
         } > (environment.apiUrl + "user/add", data)
         .subscribe(res => {
-          console.log(res)
-          if (res.status == "success") {
-            this._snackBar.open("New User Added", 'Close', {
-              duration: 6000,
-            });
-            
-          }
+          resolve(res)
         })
+      })
+      
+    }
+    usergetrolewise(){
+      return new Promise((resolve,reject)=>{this.http.get <{
+          status: string,
+          data: any
+        }>(environment.apiUrl + "user/getrolewise")
+        .subscribe(res => {
+          resolve(res);
+        })
+      })
+    }
+    usergetdepartments(){
+      return new Promise((resolve,reject)=>{this.http.get <{
+          status: string,
+          data: any
+        }>(environment.apiUrl + "user/getdepartments")
+        .subscribe(res => {
+          resolve(res);
+        })
+      })
     }
     // #endregion login logout profile users
   

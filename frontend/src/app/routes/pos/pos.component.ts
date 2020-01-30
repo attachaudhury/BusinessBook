@@ -21,28 +21,27 @@ import { MatSnackBar } from '@angular/material';
 })
 export class PosComponent implements OnInit {
   searchtextcontrol = new FormControl();
-  searchtextcontrolvaluechangesubsscription:Subscription;
+  searchtextcontrolvaluechangesubsscription: Subscription;
   filteredproducts: product[] = [];
   products: product[] = [];
   cart: product[] = [];
-  carttotal:number=0.0;
-  scanningmode=false;
-  selectedproduct:product=null;
-  constructor(private httpservice: HttpService,private matsnackbar: MatSnackBar ) {
+  carttotal: number = 0.0;
+  scanningmode = false;
+  selectedproduct: product = null;
+  constructor(private httpservice: HttpService, private matsnackbar: MatSnackBar) {
 
   }
   ngOnInit() {
     this.getpagedata();
-    this.changesearchmode({checked:false});
+    this.changesearchmode({ checked: false });
   }
-  changesearchmode(event){
-    this.scanningmode =event.checked;
-    if(this.scanningmode)
-    {
+  changesearchmode(event) {
+    this.scanningmode = event.checked;
+    if (this.scanningmode) {
       this.searchtextcontrolvaluechangesubsscription.unsubscribe();
-      this.filteredproducts=[]
+      this.filteredproducts = []
     }
-    else{
+    else {
       this.searchtextcontrolvaluechangesubsscription = this.searchtextcontrol.valueChanges.subscribe(val => {
         this.selectedproduct = null;
         var tmpproducts = this.products.filter(el => {
@@ -69,40 +68,53 @@ export class PosComponent implements OnInit {
       if (product.name == selectedValue) {
         var tmpproduct = { _id: product._id, name: product.name, barcode: product.barcode, saleprice: product.saleprice, quantity: 1, total: product.saleprice };
         this.selectedproduct = tmpproduct;
-         break;
+        break;
       }
     }
   }
-  async searchtextcontrolkeydown(eventkey){
-    if(this.scanningmode){
-      console.log(this.searchtextcontrol)
-    }else
-    {
-      if(eventkey=="Enter" && this.selectedproduct!=null)
-    {
-      console.log(eventkey);
-      this.addproducttocart(this.selectedproduct);
+  async searchtextcontrolkeydown(eventkey) {
+    if (this.scanningmode && eventkey=="Enter") {
+      console.log(this.searchtextcontrol.value);
+      for (let i = 0; i < this.products.length; i++) {
+        let element = this.products[i];
+        if(this.searchtextcontrol.value == element.barcode)
+        {
+          this.addproducttocart(element);
+          break;
+        }
+      }
     }
-    else if(eventkey=="Delete" && this.selectedproduct!=null)
-    {
-      console.log(eventkey);
-      this.deleteproductfromcart(this.selectedproduct);
+    else {
+      if (eventkey == "Enter" && this.selectedproduct != null) {
+        console.log(eventkey);
+        this.addproducttocart(this.selectedproduct);
+      }
+      else if (eventkey == "Delete" && this.selectedproduct != null) {
+        console.log(eventkey);
+        this.deleteproductfromcart(this.selectedproduct);
+      }
+      else if (eventkey == "Shift" && this.selectedproduct != null) {
+        console.log(eventkey);
+      }
+      else if (eventkey == "End" && this.cart.length > 0) {
+        this.matsnackbar.open('Sale in process', 'Close', {duration:2000})
+        var salestatus = await this.httpservice.possale({ list: this.cart })
+        console.log(salestatus);
+        if(salestatus['status']=='success')
+        {
+          this.matsnackbar.open('Sale successfully', 'Close', {duration:5000});
+          this.cart=[];
+          this.updatecarttotal();
+        }
+        else{
+          this.matsnackbar.open('Sale Failed', 'Close', {duration:5000})
+        }
+      }
     }
-    else if(eventkey=="Shift" && this.selectedproduct!=null)
-    {
-      console.log(eventkey);
-    }
-    else if(eventkey=="End" && this.cart.length>0)
-    {
-      this.matsnackbar.open('Sale in process','Close',{})
-      var salestatus = await this.httpservice.possale({list:this.cart})
-      console.log(salestatus);
-    }
-    }
-    
+
   }
   addproducttocart(product: product) {
-    this.selectedproduct= product;
+    this.selectedproduct = product;
     for (let index = 0; index < this.cart.length; index++) {
       const element = this.cart[index];
       if (element._id == product._id) {
@@ -113,6 +125,8 @@ export class PosComponent implements OnInit {
         return false;
       }
     }
+    product.quantity=1;
+    product['total'] = product.saleprice;
     this.cart.push(product);
     this.cart = [...this.cart];
     this.updatecarttotal();
@@ -122,16 +136,16 @@ export class PosComponent implements OnInit {
       const element = this.cart[index];
       if (element._id == product._id) {
         var tmpcart = [...this.cart];
-        tmpcart.splice(index,1)
+        tmpcart.splice(index, 1)
         this.cart = [...tmpcart];
         this.updatecarttotal();
         break;
       }
     }
   }
-  updatecarttotal(){
+  updatecarttotal() {
     var tmptotal = 0.0;
-    this.cart.map(el=>{tmptotal+=el['total']});
-    this.carttotal= tmptotal;
+    this.cart.map(el => { tmptotal += el['total'] });
+    this.carttotal = tmptotal;
   }
 }

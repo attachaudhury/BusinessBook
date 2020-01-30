@@ -1,7 +1,7 @@
 export interface user{
   _id?:string;
   address?:string;
-  agency?:any;
+  department?:any;
   brandimage?:any;
   companyname?:string;
   companyimage?:string;

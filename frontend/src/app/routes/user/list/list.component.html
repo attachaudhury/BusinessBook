@@ -1,0 +1,34 @@
+<page-header class="bg-green-600"></page-header>
+
+<table mat-table [dataSource]="model" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="firstname">
+      <th mat-header-cell *matHeaderCellDef> firstname </th>
+      <td mat-cell *matCellDef="let element"> {{element.firstname}} </td>
+    </ng-container>
+    <ng-container matColumnDef="lastname">
+      <th mat-header-cell *matHeaderCellDef> lastname </th>
+      <td mat-cell *matCellDef="let element"> {{element.lastname}} </td>
+    </ng-container>
+    <ng-container matColumnDef="role">
+      <th mat-header-cell *matHeaderCellDef> role </th>
+      <td mat-cell *matCellDef="let element"> {{element.role}} </td>
+    </ng-container>
+    <ng-container matColumnDef="designation">
+      <th mat-header-cell *matHeaderCellDef> designation </th>
+      <td mat-cell *matCellDef="let element"> {{element.designation}} </td>
+    </ng-container>
+    <ng-container matColumnDef="activestatus">
+      <th mat-header-cell *matHeaderCellDef> activestatus </th>
+      <td mat-cell *matCellDef="let element"> {{element.activestatus}} </td>
+    </ng-container>
+    <ng-container matColumnDef="action" sticky>
+        <th mat-header-cell *matHeaderCellDef> Action </th>
+        <td mat-cell *matCellDef="let element" style="cursor: pointer;width: 10%;"> 
+            <mat-icon (click)="edit(element)" style="color: #43A047;">edit</mat-icon>
+            <mat-icon (click)="delete(element)" style="color:#E53935;">delete</mat-icon>
+        </td>
+      </ng-container>
+    <tr mat-header-row *matHeaderRowDef="['firstname','lastname','role','designation','activestatus','action']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['firstname','lastname','role','designation','activestatus','action'];"></tr>
+  </table>

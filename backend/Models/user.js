@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('mongoose-unique-validator');
 const user = mongoose.Schema({
     address:{type:String,required:false},
-    agency:{type:mongoose.Schema.Types.ObjectId,ref:"user",required:false,default:null},
+    department:{type:mongoose.Schema.Types.ObjectId,ref:"user",required:false,default:null},
     companyname:{type:String,required:false},
     companymessage:{type:String,required:false},
     companyimage:{type:String,required:false},

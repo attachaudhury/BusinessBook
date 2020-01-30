@@ -83,6 +83,12 @@ const routes: Routes = [
         data: { title: 'POS', titleI18n: 'pos' },
         canActivate: [AuthGuard],
       },
+      {
+        path: 'user',
+        loadChildren: () => import('./user/user.module').then(m => m.UserModule),
+        data: { title: 'User', titleI18n: 'user' },
+        canActivate: [AuthGuard],
+      },
     ],
   },
   {

@@ -375,6 +375,24 @@
         "color": "green-500",
         "value": "5"
       }
+    },
+    {
+      "state": "user",
+      "name": "User",
+      "type": "sub",
+      "icon": "store",
+      "children": [
+        {
+          "state": "add",
+          "name": "Add User",
+          "type": "link"
+        },
+        {
+          "state": "list",
+          "name": "User List Rolewise",
+          "type": "link"
+        }
+      ]
     }
   ]
 }
