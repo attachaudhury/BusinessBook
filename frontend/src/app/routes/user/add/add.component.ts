@@ -10,7 +10,6 @@ import { MatSnackBar } from '@angular/material';
   templateUrl: './add.component.html',
 })
 export class AddComponent implements OnInit {
-  reactiveForm2: FormGroup;
   departments:user[];
   model:user = {};
   constructor(private fb: FormBuilder, private httpService: HttpService,private matsnackbar:MatSnackBar) {

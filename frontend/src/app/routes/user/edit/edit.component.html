@@ -3,52 +3,48 @@
 <div fxLayout="row wrap" class="matero-row">
   <div fxFlex="100" fxFlex.lt-sm="100" class="matero-col">
     <mat-card>
-      <mat-card-title>Category</mat-card-title>
-      <form *ngIf="model" class="matero-form-horizontal">
+      <mat-card-title>User Update</mat-card-title>
+      <form class="matero-form-horizontal">
         <div fxLayout="row wrap" fxLayoutGap="8px grid">
           <div fxFlex="50" fxFlex.lt-sm="100">
             <mat-form-field>
-              <mat-label>Name</mat-label>
-              <input matInput placeholder="Product Name" [(ngModel)]="model.name" name="name">
+              <mat-label>firstname</mat-label>
+              <input matInput placeholder="firstname" [(ngModel)]="model.firstname" name="firstname">
             </mat-form-field>
           </div>
           <div fxFlex="50" fxFlex.lt-sm="100">
             <mat-form-field>
-              <mat-label>Categories</mat-label>
-              <mat-select [(ngModel)]="model.categories" name="categories" multiple>
-                <mat-option  *ngFor="let cat of categories" value="{{cat._id}}">{{cat.name}}</mat-option>
+              <mat-label>lastname</mat-label>
+              <input matInput placeholder="lastname" [(ngModel)]="model.lastname" name="lastname">
+            </mat-form-field>
+          </div>
+          <div fxFlex="50" fxFlex.lt-sm="100">
+            <mat-form-field>
+              <mat-label>department</mat-label>
+              <mat-select [(ngModel)]="model.department" name="department">
+                <mat-option  *ngFor="let cat of departments" value="{{cat._id}}">{{cat.firstname}} {{cat.username}}</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
           
           <div fxFlex="50" fxFlex.lt-sm="100">
             <mat-form-field>
-              <mat-label>description</mat-label>
-              <input matInput placeholder="description" [(ngModel)]="model.description" name="description">
+              <mat-label>username</mat-label>
+              <input matInput placeholder="username" [(ngModel)]="model.username" name="username">
             </mat-form-field>
           </div>
           <div fxFlex="50" fxFlex.lt-sm="100">
             <mat-form-field>
-              <mat-label>purchaseprice</mat-label>
-              <input matInput placeholder="purchaseprice" [(ngModel)]="model.purchaseprice" name="purchaseprice">
+              <mat-label>password</mat-label>
+              <input matInput placeholder="password" [(ngModel)]="model.password" name="password">
             </mat-form-field>
           </div>
           <div fxFlex="50" fxFlex.lt-sm="100">
             <mat-form-field>
-              <mat-label>quantity</mat-label>
-              <input matInput placeholder="quantity" [(ngModel)]="model.quantity" name="quantity">
-            </mat-form-field>
-          </div>
-          <div fxFlex="50" fxFlex.lt-sm="100">
-            <mat-form-field>
-              <mat-label>saleprice</mat-label>
-              <input matInput placeholder="saleprice" [(ngModel)]="model.saleprice" name="saleprice">
-            </mat-form-field>
-          </div>
-          <div fxFlex="50" fxFlex.lt-sm="100">
-            <mat-form-field>
-              <mat-label>barcode</mat-label>
-              <input matInput placeholder="barcode" [(ngModel)]="model.barcode" name="barcode">
+              <mat-label>role</mat-label>
+              <mat-select [(ngModel)]="model.role" name="role">
+                <mat-option  *ngFor="let cat of ['department','user']" value="{{cat}}">{{cat}}</mat-option>
+              </mat-select>
             </mat-form-field>
           </div>
 

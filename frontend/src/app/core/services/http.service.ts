@@ -122,6 +122,27 @@ export class HttpService {
       })
       
     }
+    userdelete(data){
+      return new Promise((resolve,reject)=>{
+        this.http.post < {
+          status: string,
+          data: any
+        } > (environment.apiUrl + "user/delete", data)
+        .subscribe(res => {
+          resolve(res)
+        })
+      })
+    }
+    usergetonebyid(data) {
+      return new Promise((resolve,reject)=>{this.http.post<{
+          status: string,
+          data: any
+        }>(environment.apiUrl + "user/getonebyid",data)
+        .subscribe(res => {
+          resolve(res);
+        })
+      })
+    }
     usergetrolewise(){
       return new Promise((resolve,reject)=>{this.http.get <{
           status: string,
@@ -131,6 +152,18 @@ export class HttpService {
           resolve(res);
         })
       })
+    }
+    userupdate(data) {
+      return new Promise((resolve,reject)=>{
+        this.http.post < {
+          status: string,
+          data: any
+        } > (environment.apiUrl + "user/update", data)
+        .subscribe(res => {
+          resolve(res)
+        })
+      })
+      
     }
     usergetdepartments(){
       return new Promise((resolve,reject)=>{this.http.get <{
@@ -142,6 +175,7 @@ export class HttpService {
         })
       })
     }
+
     // #endregion login logout profile users
   
 

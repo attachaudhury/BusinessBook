@@ -46,24 +46,25 @@ export class ListComponent implements OnInit {
     const dialogRef = this.dialog.open(DeleteConfirmationDialog, {
       width: '250px'
     });
-    // dialogRef.afterClosed().subscribe(async (result) => {
-    //   if (result) {
-    //     var res  = await this.httpService.productdelete({_id:this.selectedobject._id});
-    //     console.log(res);
-    //     if(res["status"]=="success")
-    //     {
-    //       this.matsnackbar.open("Operation Successful", 'Close', {
-    //         duration: 6000,
-    //       });
-    //       this.getpagedata();
-    //     }
-    //     else{
-    //       this.matsnackbar.open("Operation Failed", 'Close', {
-    //         duration: 6000,
-    //       });
-    //     }
-    //   }
-    // });
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (result) {
+        this.matsnackbar.open('Deletting User','Close',{duration:3000});
+        var res  = await this.httpService.userdelete({_id:this.selectedobject._id});
+        console.log(res);
+        if(res["status"]=="success")
+        {
+          this.matsnackbar.open("Operation Successful", 'Close', {
+            duration: 6000,
+          });
+          this.getpagedata();
+        }
+        else{
+          this.matsnackbar.open("Operation Failed", 'Close', {
+            duration: 6000,
+          });
+        }
+      }
+    });
   }
 }
 

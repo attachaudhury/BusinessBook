@@ -312,8 +312,8 @@ app.post("/api/user/delete", checkAuth, async (req, res, next) => {
   try {
     console.log('deleteuser request');
     console.log(req.body);
-    var deletinguserid = req.body.deletinguserid || '';
-    if (deletinguserid == '') {
+    var _id = req.body._id || '';
+    if (_id == '') {
       res.status(201).json({
         status: "failed",
         message: 'User not mentioned',
@@ -321,7 +321,7 @@ app.post("/api/user/delete", checkAuth, async (req, res, next) => {
       return;
     }
 
-    var usertodelete = await user.findOne({ _id: deletinguserid });
+    var usertodelete = await user.findOne({ _id: _id });
     // userprojects = await videoproject.find({userid:deletinguserid}); 
     // console.log('userprojects');
     // console.log(userprojects);
@@ -354,7 +354,7 @@ app.post("/api/user/delete", checkAuth, async (req, res, next) => {
     }
     else if (usertodelete.role == 'department') {
       console.log('delete department account')
-      await user.remove({ department: deletinguserid })
+      await user.remove({ department: _id })
       await usertodelete.remove()
       res.status(201).json({
         status: "success",
@@ -383,7 +383,104 @@ app.post("/api/user/delete", checkAuth, async (req, res, next) => {
             message: 'Not saved.'
           })
         })
+      }else{
+        res.status(201).json({
+          status: "failed",
+          message: 'Admin cannot be removed'
+        })
       }
+    }
+  } catch (ex) {
+    res.status(201).json({
+      status: "failed",
+      message: 'Not saved ....',
+      ex: ex.message
+    })
+  }
+})
+app.post("/api/user/getonebyid",async (req, res, next) => {
+  try
+  {
+    if(!req.body._id){
+      res.status(201).json({
+        status: "failed",
+        message:'Id empty',
+      });
+    }
+    
+    var result = await user.findOne({_id:req.body._id});
+    if(result){
+      res.status(201).json({
+        status: "success",
+        data:result,
+
+      })
+    }
+    else
+    {
+      res.status(201).json({
+        status: "failed",
+        message:'User not found!'
+      })
+    }
+  }catch(ex)
+  {
+    res.status(201).json({
+      status: "failed",
+      message:'User not found!',
+      ex:ex.message
+    });
+  }
+  
+})
+app.post("/api/user/update", checkAuth, async (req, res, next) => {
+  try {
+    console.log('update request');
+    console.log(req.body);
+    var username = req.body.username || '';
+    var password = req.body.password || '';
+    var role = req.body.role || '';
+    var department = req.body.department || null;
+
+    if (username == '' || password == '' || role == '') {
+      res.status(201).json({
+        status: "failed",
+        message: 'Email or password or role missing',
+      })
+      return;
+    }
+    if (role == 'user' && department == null) {
+      res.status(201).json({
+        status: "failed",
+        message: 'department not specified for user',
+      })
+      return;
+    }
+    if (role == 'department' && department != null) {
+      res.status(201).json({
+        status: "failed",
+        message: 'department specified for department account',
+      })
+      return;
+    }
+    if (role == 'admin' && department != '') {
+      res.status(201).json({
+        status: "failed",
+        message: 'department specified for admin account',
+      })
+      return;
+    }
+    var result = await user.findByIdAndUpdate(req.body._id,{...req.body},{new:true});
+    if (result) {
+      res.status(201).json({
+        status: "success",
+        data: result
+      })
+    } else {
+      res.status(201).json({
+        status: "failed",
+        message: 'Not saved ....',
+      })
     }
   } catch (ex) {
     res.status(201).json({
