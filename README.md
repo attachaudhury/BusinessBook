@@ -2,7 +2,7 @@
 > A web/desktop erp built for nodejs (Node/Electron/Angualr/Express/Mongo).
 
 
-I am baking a open source erp for small and medium size businesses. New contributors are warmly encouraged
+I am making a open source erp for small and medium size businesses. New contributors are warmly encouraged
 
 
 ## Installation
