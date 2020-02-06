@@ -33,8 +33,16 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, PATCH, OPTIONS,DELETE");
   next()
 });
+
 app.use(express.static("public"));
+var chartofaccount={
+  cashaccount:null,
+  inventoryaccount:null,
+  possaleccount:null,
+  csgaccount:null,
+};
 //dbsetting();
+loadcharofaccount()
 async function dbsetting() {
   await user.remove({});
   await category.remove({});
@@ -99,11 +107,18 @@ async function dbsetting() {
   
 
   // assets account
-  var cashaccount = await financeaccount.create({name:'cash',type:'asset'});
-  var inventoryaccount = await financeaccount.create({name:'inventory',type:'asset'});
-  var possaleccount = await financeaccount.create({name:'pos sale',type:'income'});
-  var csgaccount = await financeaccount.create({name:'cost of goods sold',type:'expence'});
+  chartofaccount.possaleccount = await financeaccount.create({name:'pos sale',type:'income'});
+  chartofaccount.cashaccount = await financeaccount.create({name:'cash',type:'asset'});
+  chartofaccount.csgaccount = await financeaccount.create({name:'cost of goods sold',type:'expence'});
+  chartofaccount.inventoryaccount = await financeaccount.create({name:'inventory',type:'asset'});
   
+}
+
+async function loadcharofaccount(){
+  chartofaccount.possaleaccount = await financeaccount.findOne({name:"pos sale"});
+  chartofaccount.cashaccount = await financeaccount.findOne({name:"cash"});
+  chartofaccount.cgsaccount = await financeaccount.findOne({name:"cost of goods sold"});
+  chartofaccount.inventoryaccount = await financeaccount.findOne({name:"inventory"});
 }
 app.get("/", (req, res, next) => {
   res.status(201).json({
@@ -912,37 +927,31 @@ app.post("/api/product/edit",async (req, res, next) => {
 app.post("/api/accounting/possalenew",checkAuth,async (req, res, next) => {
   try
   {
-    console.log('pos/sale');
+    console.log('accounting/possalenew');
     var soldproducts = req.body.list;
-    var soldproducttotal = soldproducts.reduce(function(total,currentvalue){
-      return total+currentvalue.total;
+    var soldproducttotal = soldproducts.reduce(function(total,currentelement){
+      return total+currentelement.total;
     },0);
-    var possaleaccount = await financeaccount.findOne({name:"pos sale"});
-    var cashaccount = await financeaccount.findOne({name:"cash"});
-    var cgseaccount = await financeaccount.findOne({name:"cost of goods sold"});
-    var inventoryaccount = await financeaccount.findOne({name:"inventory"});
-    
-    // console.log(soldproducttotal);
-    // console.log(possaleaccount);
-    // console.log(cashaccount);
-    // console.log(inventoryaccount);
-    // console.log(cgseaccount);
+
+    var soldproductpurchasetotal = soldproducts.reduce(async function(total,currentelement){
+      var product = await product.findById(currentelement._id); 
+      return total+(product.purchaseprice*currentelement.quantity);
+    },0);
+
+    var possaletransaction = await financetransaction.create({amount:-soldproducttotal,description:'sale',financeaccount:chartofaccount.possaleaccount._id,soldproducts:soldproducts,status:'posted',user:req.userid});
+
+    await financetransaction.findByIdAndUpdate(possaletransaction,{group:possaletransaction._id});
+
+    var cashtransaction = await financetransaction.create({amount:soldproducttotal,description:'cash against sale '+possaletransaction._id,financeaccount:chartofaccount.cashaccount._id,group:possaletransaction._id,status:'posted',user:req.userid});
 
 
-    var passaletransaction = await financetransaction.create({amount:-soldproducttotal,description:'sale',financeaccount:possaleaccount._id,soldproducts:soldproducts,status:'posted',user:req.userid});
+    var cgstransaction = await financetransaction.create({amount:soldproductpurchasetotal,description:'cgs against sale '+possaletransaction._id,financeaccount:chartofaccount.cgsaccount._id,group:possaletransaction._id,status:'posted',user:req.userid});
 
-    await financetransaction.findByIdAndUpdate(passaletransaction,{group:passaletransaction._id});
-
-    var cashtransaction = await financetransaction.create({amount:soldproducttotal,description:'cash against sale '+passaletransaction._id,financeaccount:cashaccount._id,group:passaletransaction._id,status:'posted',user:req.userid});
-
-
-    var cgstransaction = await financetransaction.create({amount:soldproducttotal,description:'cgs against sale '+passaletransaction._id,financeaccount:cgseaccount._id,group:passaletransaction._id,status:'posted',user:req.userid});
-
-    var inventorytransaction = await financetransaction.create({amount:-soldproducttotal,description:'inventory against sale '+passaletransaction._id,financeaccount:inventoryaccount._id,group:passaletransaction._id,status:'posted',user:req.userid});
+    var inventorytransaction = await financetransaction.create({amount:-soldproductpurchasetotal,description:'inventory against sale '+possaletransaction._id,financeaccount:chartofaccount.inventoryaccount._id,group:possaletransaction._id,status:'posted',user:req.userid});
 
     res.status(201).json({
       status: "success",
-      data:passaletransaction._id,
+      data:possaletransaction._id,
     })
   }catch(ex)
   {
@@ -952,14 +961,13 @@ app.post("/api/accounting/possalenew",checkAuth,async (req, res, next) => {
       ex:ex.message
     });
   }
-  
 })
 
 app.get("/api/accounting/possaleget", async (req, res, next) => {
   console.log('/api/accounting/possaleget')
   try
   {
-    var result = await product.find({});
+    var result = await financetransaction.find({financeaccount:chartofaccount.possaleccount._id}).sort({_id:-1});
     res.status(201).json({
       status: "success",
       data:result

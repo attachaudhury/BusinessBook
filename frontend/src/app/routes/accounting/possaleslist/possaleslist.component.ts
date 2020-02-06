@@ -24,43 +24,28 @@ export class PosSalesListComponent implements OnInit {
   ngOnInit() {
     this.getpagedata();
   }
-  getpagedata()
+  async getpagedata()
   {
-    this.httpService.productget().then(res => {
-      console.log('loaded getpagedata');
-      console.log(res);
-      if(res["status"]=="success")
+    var result = await this.httpService.accountingpossaleget();
+    console.log('loaded getpagedata');
+      console.log(result);
+      if(result["status"]=="success")
       {
-       this.model =  res["data"];
+       this.model =  result["data"];
       }
-    });
   }
 
-  edit(item) {
+  print(item) {
     this.selectedobject = item;
-    this.router.navigate(['/product/edit',this.selectedobject._id]);
   }
-  async delete(item) {
+  async details(item) {
     this.selectedobject = item;
     const dialogRef = this.dialog.open(DeleteConfirmationDialog, {
       width: '250px'
     });
     dialogRef.afterClosed().subscribe(async (result) => {
       if (result) {
-        var res  = await this.httpService.productdelete({_id:this.selectedobject._id});
-        console.log(res);
-        if(res["status"]=="success")
-        {
-          this.matsnackbar.open("Operation Successful", 'Close', {
-            duration: 6000,
-          });
-          this.getpagedata();
-        }
-        else{
-          this.matsnackbar.open("Operation Failed", 'Close', {
-            duration: 6000,
-          });
-        }
+        
       }
     });
   }

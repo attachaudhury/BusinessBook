@@ -2,33 +2,25 @@
 
 <table mat-table [dataSource]="model" class="mat-elevation-z8">
 
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef> Name </th>
-      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    <ng-container matColumnDef="_id">
+      <th mat-header-cell *matHeaderCellDef> Id </th>
+      <td mat-cell *matCellDef="let element"> {{element._id}} </td>
     </ng-container>
-    <ng-container matColumnDef="barcode">
-      <th mat-header-cell *matHeaderCellDef> barcode </th>
-      <td mat-cell *matCellDef="let element"> {{element.barcode}} </td>
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef> Amount </th>
+      <td mat-cell *matCellDef="let element"> {{-element.amount}} </td>
     </ng-container>
-    <ng-container matColumnDef="quantity">
-      <th mat-header-cell *matHeaderCellDef> quantity </th>
-      <td mat-cell *matCellDef="let element"> {{element.quantity}} </td>
-    </ng-container>
-    <ng-container matColumnDef="purchaseprice">
-      <th mat-header-cell *matHeaderCellDef> purchaseprice </th>
-      <td mat-cell *matCellDef="let element"> {{element.purchaseprice}} </td>
-    </ng-container>
-    <ng-container matColumnDef="saleprice">
-      <th mat-header-cell *matHeaderCellDef> saleprice </th>
-      <td mat-cell *matCellDef="let element"> {{element.saleprice}} </td>
+    <ng-container matColumnDef="createdata">
+      <th mat-header-cell *matHeaderCellDef> Date </th>
+      <td mat-cell *matCellDef="let element"> {{element.createdata}} </td>
     </ng-container>
     <ng-container matColumnDef="action" sticky>
         <th mat-header-cell *matHeaderCellDef> Action </th>
         <td mat-cell *matCellDef="let element" style="cursor: pointer;width: 10%;"> 
-            <mat-icon (click)="edit(element)" style="color: #43A047;">edit</mat-icon>
-            <mat-icon (click)="delete(element)" style="color:#E53935;">delete</mat-icon>
+            <mat-icon (click)="print(element)" style="color: #43A047;">edit</mat-icon>
+            <mat-icon (click)="details(element)" style="color:#E53935;">delete</mat-icon>
         </td>
       </ng-container>
-    <tr mat-header-row *matHeaderRowDef="['name','barcode','quantity','purchaseprice','saleprice','action']"></tr>
-    <tr mat-row *matRowDef="let row; columns: ['name','barcode','quantity','purchaseprice','saleprice','action'];"></tr>
+    <tr mat-header-row *matHeaderRowDef="['_id','amount','createdata','action']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['_id','amount','createdata','action'];"></tr>
   </table>
