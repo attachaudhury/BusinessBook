@@ -17,8 +17,8 @@
     <ng-container matColumnDef="action" sticky>
         <th mat-header-cell *matHeaderCellDef> Action </th>
         <td mat-cell *matCellDef="let element" style="cursor: pointer;width: 10%;"> 
-            <mat-icon (click)="print(element)" style="color: #43A047;">edit</mat-icon>
-            <mat-icon (click)="details(element)" style="color:#E53935;">delete</mat-icon>
+            <mat-icon (click)="print(element)" style="color: #43A047;">print</mat-icon>
+            <mat-icon (click)="details(element)" style="color:#1E88E5;">list</mat-icon>
         </td>
       </ng-container>
     <tr mat-header-row *matHeaderRowDef="['_id','amount','createdata','action']"></tr>

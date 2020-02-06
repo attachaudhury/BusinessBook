@@ -933,10 +933,15 @@ app.post("/api/accounting/possalenew",checkAuth,async (req, res, next) => {
       return total+currentelement.total;
     },0);
 
-    var soldproductpurchasetotal = soldproducts.reduce(async function(total,currentelement){
-      var product = await product.findById(currentelement._id); 
-      return total+(product.purchaseprice*currentelement.quantity);
-    },0);
+    // var soldproductpurchasetotal = soldproducts.reduce(async function(total,currentelement){
+    //   var loadedproduct = await product.findById(currentelement._id); 
+    //   return total+(loadedproduct.purchaseprice*currentelement.quantity);
+    // },0);
+    var soldproductpurchasetotal = 0;
+    for (let index = 0; index < soldproducts.length; index++) {
+      const element = await product.findById(soldproducts[index]._id);
+      soldproductpurchasetotal+= (element.purchaseprice*soldproducts[index].quantity)
+    }
 
     var possaletransaction = await financetransaction.create({amount:-soldproducttotal,description:'sale',financeaccount:chartofaccount.possaleaccount._id,soldproducts:soldproducts,status:'posted',user:req.userid});
 
@@ -967,13 +972,14 @@ app.get("/api/accounting/possaleget", async (req, res, next) => {
   console.log('/api/accounting/possaleget')
   try
   {
-    var result = await financetransaction.find({financeaccount:chartofaccount.possaleccount._id}).sort({_id:-1});
+    var result = await financetransaction.find({financeaccount:chartofaccount.possaleaccount._id}).sort({_id:-1});
     res.status(201).json({
       status: "success",
       data:result
     })
   }catch(Exception)
   {
+    console.log(Exception)
     res.status(201).json({
       status: "failed",
       message:'can not get result',

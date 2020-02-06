@@ -3,8 +3,9 @@ import { SharedModule } from '@shared/shared.module';
 import { RoutingModule } from './routing.module';
 
 import { PosSalesListComponent } from './possaleslist/possaleslist.component';
+import { PurchaseComponent } from './purchase/purchase.component';
 
-const COMPONENTS = [ PosSalesListComponent];
+const COMPONENTS = [ PosSalesListComponent,PurchaseComponent];
 const COMPONENTS_DYNAMIC = [];
 
 @NgModule({

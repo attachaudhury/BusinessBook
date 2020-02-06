@@ -1,0 +1,56 @@
+<breadcrumb></breadcrumb>
+
+<div class="matero-row" fxLayout="row wrap">
+  <div class="matero-col" fxFlex.gt-sm="50" fxFlex="100">
+    <form class="matero-form-horizontal">
+      <mat-form-field class="example-full-width">
+        <input type="text" matInput [formControl]="searchtextcontrol" [matAutocomplete]="auto" (keydown)="searchtextcontrolkeydown($event.key)">
+        <mat-autocomplete (optionSelected)="searchtextcontrolselectedoption($event)" autoActiveFirstOption
+          #auto="matAutocomplete">
+          <mat-option *ngFor="let product of filteredproducts" [value]="product.name">
+            {{product.name}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </form>
+    <mat-slide-toggle color="primary" (change)="changesearchmode($event)">
+      Scanning
+    </mat-slide-toggle>
+  </div>
+  <div class="matero-col" fxFlex.gt-sm="50" fxFlex="100">
+    <mat-card>
+      <table class="w-full" mat-table [dataSource]="cart">
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        </ng-container>
+        <ng-container matColumnDef="barcode">
+          <th mat-header-cell *matHeaderCellDef> Barcode </th>
+          <td mat-cell *matCellDef="let element"> {{element.barcode}} </td>
+        </ng-container>
+        <ng-container matColumnDef="saleprice">
+          <th mat-header-cell *matHeaderCellDef> Price </th>
+          <td mat-cell *matCellDef="let element"> {{element.saleprice}} </td>
+        </ng-container>
+        <ng-container matColumnDef="quantity">
+          <th mat-header-cell *matHeaderCellDef> Quantity </th>
+          <td mat-cell *matCellDef="let element"> {{element.quantity}} </td>
+        </ng-container>
+        <ng-container matColumnDef="total">
+          <th mat-header-cell *matHeaderCellDef> Total </th>
+          <td mat-cell *matCellDef="let element"> {{element.total}} </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="['name', 'barcode', 'saleprice', 'quantity','total']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['name', 'barcode', 'saleprice', 'quantity','total'];"></tr>
+      </table>
+    </mat-card>
+    <mat-card class="bg-indigo-500 text-white">
+      <mat-card-title class="f-s-12 f-w-100">Total</mat-card-title>
+      <mat-card-content>
+        <h2>{{carttotal}}</h2>
+        <easy-progress [value]="100"></easy-progress>
+        <small class="text-muted">POS Sale</small>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
