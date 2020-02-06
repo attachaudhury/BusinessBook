@@ -89,6 +89,12 @@ const routes: Routes = [
         data: { title: 'User', titleI18n: 'user' },
         canActivate: [AuthGuard],
       },
+      {
+        path: 'accounting',
+        loadChildren: () => import('./accounting/accounting.module').then(m => m.AccountingModule),
+        data: { title: 'Accounting', titleI18n: 'accounting' },
+        canActivate: [AuthGuard],
+      },
     ],
   },
   {

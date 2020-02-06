@@ -1,7 +1,7 @@
 {
   "name": "business-book",
   "version": "0.0.0",
-  "main":"main.js",
+  "main": "main.js",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -14,9 +14,6 @@
     "build:starter": "gulp --gulpfile gulpfile.js",
     "copy:schematics": "npm run clean:schematics && cpr schematics dist/schematics",
     "clean:schematics": "rimraf dist/schematics",
-    "lint": "npm run lint:ts && npm run lint:scss",
-    "lint:ts": "tslint -p tsconfig.app.json -c tslint.json 'src/**/*.ts'",
-    "lint:scss": "stylelint --syntax scss 'src/**/*.scss' --fix",
     "hmr": "ng serve -c=hmr --disable-host-check",
     "predeploy": "npm run build:release",
     "deploy": "npm run deploy:ghpages",

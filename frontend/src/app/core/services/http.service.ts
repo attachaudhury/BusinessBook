@@ -292,11 +292,20 @@ export class HttpService {
     }
     // #endregion product
 
-    possale(data){
+    //#region accounting
+    accountingpossalenew(data){
       return new Promise((resolve,reject)=>{
-        this.http.post<{status?:string,data?:any}>(environment.apiUrl + "pos/sale",data).subscribe(res=>{
+        this.http.post<{status?:string,data?:any}>(environment.apiUrl + "accounting/possalenew",data).subscribe(res=>{
           resolve(res)
         })
       })
     }
+    accountingpossaleget(){
+      return new Promise((resolve,reject)=>{
+        this.http.get<{status?:string,data?:any}>(environment.apiUrl + "accounting/possaleget").subscribe(res=>{
+          resolve(res)
+        })
+      })
+    }
+    //#endregion accounting
   }

@@ -908,8 +908,8 @@ app.post("/api/product/edit",async (req, res, next) => {
 })
 //#endregion product
 
-
-app.post("/api/pos/sale",checkAuth,async (req, res, next) => {
+//#region accounting
+app.post("/api/accounting/possalenew",checkAuth,async (req, res, next) => {
   try
   {
     console.log('pos/sale');
@@ -954,5 +954,30 @@ app.post("/api/pos/sale",checkAuth,async (req, res, next) => {
   }
   
 })
+
+app.get("/api/accounting/possaleget", async (req, res, next) => {
+  console.log('/api/accounting/possaleget')
+  try
+  {
+    var result = await product.find({});
+    res.status(201).json({
+      status: "success",
+      data:result
+    })
+  }catch(Exception)
+  {
+    res.status(201).json({
+      status: "failed",
+      message:'can not get result',
+      ex:Exception.message,
+    })
+  }
+  var result = await product.find({});
+  
+})
+//#endregion accounting
+
+
+
 
 module.exports = app;

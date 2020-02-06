@@ -393,6 +393,19 @@
           "type": "link"
         }
       ]
+    },
+    {
+      "state": "accounting",
+      "name": "Accounting",
+      "type": "sub",
+      "icon": "account_balance_wallet",
+      "children": [
+        {
+          "state": "possaleslist",
+          "name": "POS Sales",
+          "type": "link"
+        }
+      ]
     }
   ]
 }

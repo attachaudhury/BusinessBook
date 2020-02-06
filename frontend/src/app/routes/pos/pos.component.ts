@@ -98,7 +98,7 @@ export class PosComponent implements OnInit {
       }
       else if (eventkey == "End" && this.cart.length > 0) {
         this.matsnackbar.open('Sale in process', 'Close', {duration:2000})
-        var salestatus = await this.httpservice.possale({ list: this.cart })
+        var salestatus = await this.httpservice.accountingpossalenew({ list: this.cart })
         console.log(salestatus);
         if(salestatus['status']=='success')
         {
