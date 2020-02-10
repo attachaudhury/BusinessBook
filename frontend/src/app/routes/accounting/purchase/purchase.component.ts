@@ -66,7 +66,7 @@ export class PurchaseComponent implements OnInit {
     for (let index = 0; index < this.filteredproducts.length; index++) {
       const product = this.filteredproducts[index];
       if (product.name == selectedValue) {
-        var tmpproduct = { _id: product._id, name: product.name, barcode: product.barcode, saleprice: product.saleprice, quantity: 1, total: product.saleprice };
+        var tmpproduct = { _id: product._id, name: product.name, barcode: product.barcode, purchaseprice: product.purchaseprice, quantity: 1, total: product.purchaseprice };
         this.selectedproduct = tmpproduct;
         break;
       }
@@ -119,14 +119,16 @@ export class PurchaseComponent implements OnInit {
       const element = this.cart[index];
       if (element._id == product._id) {
         element.quantity += 1;
-        element['total'] = element.quantity * element.saleprice;
+        element['price'] = element['price'];
+        element['total'] = element.quantity * element['price'];
         this.cart = [...this.cart];
         this.updatecarttotal();
         return false;
       }
     }
     product.quantity=1;
-    product['total'] = product.saleprice;
+    product['price'] = product.purchaseprice;
+    product['total'] = product.purchaseprice;
     this.cart.push(product);
     this.cart = [...this.cart];
     this.updatecarttotal();

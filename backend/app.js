@@ -42,7 +42,7 @@ var chartofaccount={
   csgaccount:null,
 };
 //dbsetting();
-loadcharofaccount()
+//loadcharofaccount()
 async function dbsetting() {
   await user.remove({});
   await category.remove({});

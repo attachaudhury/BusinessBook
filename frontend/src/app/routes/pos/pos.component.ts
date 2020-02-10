@@ -119,13 +119,15 @@ export class PosComponent implements OnInit {
       const element = this.cart[index];
       if (element._id == product._id) {
         element.quantity += 1;
-        element['total'] = element.quantity * element.saleprice;
+        element['price'] =  element['price'];
+        element['total'] = element.quantity * element['price'];
         this.cart = [...this.cart];
         this.updatecarttotal();
         return false;
       }
     }
     product.quantity=1;
+    product['price'] = product.saleprice;
     product['total'] = product.saleprice;
     this.cart.push(product);
     this.cart = [...this.cart];
