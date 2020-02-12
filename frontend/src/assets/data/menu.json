@@ -406,8 +406,13 @@
           "type": "link"
         },
         {
-          "state": "purchase",
+          "state": "purchasenew",
           "name": "Purchase",
+          "type": "link"
+        },
+        {
+          "state": "purchaselist",
+          "name": "Purchase List",
           "type": "link"
         }
       ]

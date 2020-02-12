@@ -44,12 +44,12 @@
         <tr mat-row *matRowDef="let row; columns: ['name', 'barcode', 'price', 'quantity','total'];"></tr>
       </table>
     </mat-card>
-    <mat-card class="bg-indigo-500 text-white">
+    <mat-card class="bg-teal-500 text-white">
       <mat-card-title class="f-s-12 f-w-100">Total</mat-card-title>
       <mat-card-content>
         <h2>{{carttotal}}</h2>
         <easy-progress [value]="100"></easy-progress>
-        <small class="text-muted">POS Sale</small>
+        <small class="text-muted">Purchase</small>
       </mat-card-content>
     </mat-card>
   </div>

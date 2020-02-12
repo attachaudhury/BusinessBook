@@ -307,5 +307,19 @@ export class HttpService {
         })
       })
     }
+    accountingpurchasenew(data){
+      return new Promise((resolve,reject)=>{
+        this.http.post<{status?:string,data?:any}>(environment.apiUrl + "accounting/purchasenew",data).subscribe(res=>{
+          resolve(res)
+        })
+      })
+    }
+    accountingpurchaseget(){
+      return new Promise((resolve,reject)=>{
+        this.http.get<{status?:string,data?:any}>(environment.apiUrl + "accounting/purchaseget").subscribe(res=>{
+          resolve(res)
+        })
+      })
+    }
     //#endregion accounting
   }

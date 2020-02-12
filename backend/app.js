@@ -933,19 +933,15 @@ app.post("/api/accounting/possalenew",checkAuth,async (req, res, next) => {
       return total+currentelement.total;
     },0);
 
-    // var soldproductpurchasetotal = soldproducts.reduce(async function(total,currentelement){
-    //   var loadedproduct = await product.findById(currentelement._id); 
-    //   return total+(loadedproduct.purchaseprice*currentelement.quantity);
-    // },0);
     var soldproductpurchasetotal = 0;
     for (let index = 0; index < soldproducts.length; index++) {
       const element = await product.findById(soldproducts[index]._id);
       soldproductpurchasetotal+= (element.purchaseprice*soldproducts[index].quantity)
     }
 
-    var possaletransaction = await financetransaction.create({amount:-soldproducttotal,description:'sale',financeaccount:chartofaccount.possaleaccount._id,soldproducts:soldproducts,status:'posted',user:req.userid});
+    var possaletransaction = await financetransaction.create({amount:-soldproducttotal,description:'sale',financeaccount:chartofaccount.possaleaccount._id,products:soldproducts,status:'posted',user:req.userid});
 
-    await financetransaction.findByIdAndUpdate(possaletransaction,{group:possaletransaction._id});
+    await financetransaction.findByIdAndUpdate(possaletransaction._id,{group:possaletransaction._id});
 
     var cashtransaction = await financetransaction.create({amount:soldproducttotal,description:'cash against sale '+possaletransaction._id,financeaccount:chartofaccount.cashaccount._id,group:possaletransaction._id,status:'posted',user:req.userid});
 
@@ -973,6 +969,58 @@ app.get("/api/accounting/possaleget", async (req, res, next) => {
   try
   {
     var result = await financetransaction.find({financeaccount:chartofaccount.possaleaccount._id}).sort({_id:-1});
+    res.status(201).json({
+      status: "success",
+      data:result
+    })
+  }catch(Exception)
+  {
+    console.log(Exception)
+    res.status(201).json({
+      status: "failed",
+      message:'can not get result',
+      ex:Exception.message,
+    })
+  }
+  var result = await product.find({});
+  
+})
+app.post("/api/accounting/purchasenew",checkAuth,async (req, res, next) => {
+  try
+  {
+    console.log('accounting/purchasenew');
+    var purchasedproducts = req.body.list;
+    var purchasedproductstotal = purchasedproducts.reduce(function(total,currentelement){
+      return total+currentelement.total;
+    },0);
+
+
+    var inventorytransaction = await financetransaction.create({amount:purchasedproductstotal,description:'purchase',financeaccount:chartofaccount.inventoryaccount._id,products:purchasedproducts,status:'posted',user:req.userid});
+
+
+    await financetransaction.findByIdAndUpdate(inventorytransaction._id,{group:inventorytransaction._id});
+
+    var cashtransaction = await financetransaction.create({amount:-purchasedproductstotal,description:'cash against purchase '+inventorytransaction._id,financeaccount:chartofaccount.cashaccount._id,group:inventorytransaction._id,status:'posted',user:req.userid});
+
+    
+    res.status(201).json({
+      status: "success",
+      data:inventorytransaction._id,
+    })
+  }catch(ex)
+  {
+    res.status(201).json({
+      status: "failed",
+      message:'item not found!',
+      ex:ex.message
+    });
+  }
+})
+app.get("/api/accounting/purchaseget", async (req, res, next) => {
+  console.log('/api/accounting/purchaseget')
+  try
+  {
+    var result = await financetransaction.find({financeaccount:chartofaccount.inventoryaccount._id,amount:{$gt:0},description:'purchase'}).sort({_id:-1});
     res.status(201).json({
       status: "success",
       data:result

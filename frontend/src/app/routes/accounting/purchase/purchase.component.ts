@@ -98,16 +98,16 @@ export class PurchaseComponent implements OnInit {
       }
       else if (eventkey == "End" && this.cart.length > 0) {
         this.matsnackbar.open('Sale in process', 'Close', {duration:2000})
-        var salestatus = await this.httpservice.accountingpossalenew({ list: this.cart })
+        var salestatus = await this.httpservice.accountingpurchasenew({ list: this.cart })
         console.log(salestatus);
         if(salestatus['status']=='success')
         {
-          this.matsnackbar.open('Sale successfully', 'Close', {duration:5000});
+          this.matsnackbar.open('Purchase successfully', 'Close', {duration:5000});
           this.cart=[];
           this.updatecarttotal();
         }
         else{
-          this.matsnackbar.open('Sale Failed', 'Close', {duration:5000})
+          this.matsnackbar.open('Purchase Failed', 'Close', {duration:5000})
         }
       }
     }
