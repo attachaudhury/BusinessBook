@@ -321,5 +321,12 @@ export class HttpService {
         })
       })
     }
+    accountingdashboarddataget(){
+      return new Promise((resolve,reject)=>{
+        this.http.get<{status?:string,data?:any}>(environment.apiUrl + "accounting/dashboarddataget").subscribe(res=>{
+          resolve(res)
+        })
+      })
+    }
     //#endregion accounting
   }

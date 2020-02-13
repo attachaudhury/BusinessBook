@@ -7,6 +7,8 @@ import {
   ChangeDetectorRef,
   NgZone,
 } from '@angular/core';
+import { isExpressionWithTypeArguments } from 'typescript';
+import { HttpService } from '@core';
 
 
 @Component({
@@ -29,10 +31,13 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private ngZone: NgZone,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private httpService:HttpService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.initpage();
+  }
 
   ngAfterViewInit() {
     this.ngZone.runOutsideAngular(() => this.initChart());
@@ -90,5 +95,11 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       },
     });
     this.chart1.render();
+  }
+  async initpage(){
+    this.httpService.accountingdashboarddataget().then(result=>{
+      console.log('dashboard data');
+      console.log(result);
+    })
   }
 }

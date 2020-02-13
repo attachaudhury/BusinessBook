@@ -1037,8 +1037,8 @@ app.get("/api/accounting/purchaseget", async (req, res, next) => {
   var result = await product.find({});
   
 })
-app.get("/api/accounting/getdashboarddata", async (req, res, next) => {
-  console.log('/api/accounting/getdashboarddata')
+app.get("/api/accounting/dashboarddataget", async (req, res, next) => {
+  console.log('/api/accounting/dashboarddataget')
   try
   {
     var result = {
@@ -1049,7 +1049,12 @@ app.get("/api/accounting/getdashboarddata", async (req, res, next) => {
       profitthismonth:0,
       profittoday:0,
     }
-    result.invertorytotal = await financetransaction.find({financeaccount:chartofaccount.inventoryaccount._id}).count();
+    result.invertorytotal = await financetransaction.aggregate(
+      [
+        {$match:{financeaccount:chartofaccount.inventoryaccount._id}},
+        {$group:{_id:null,sum:{$sum:"$amount"}}}
+      ]
+      ).count();
     res.status(201).json({
       status: "success",
       data:result
