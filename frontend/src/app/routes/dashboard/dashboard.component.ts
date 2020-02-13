@@ -8,7 +8,6 @@ import {
   NgZone,
 } from '@angular/core';
 
-import { DashboardService } from './dashboard.srevice';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,20 +21,13 @@ import { DashboardService } from './dashboard.srevice';
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DashboardService],
 })
 export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = this.dashboardSrv.getData();
 
-  messages = this.dashboardSrv.getMessages();
-
-  charts = this.dashboardSrv.getCharts();
   chart1 = null;
-  chart2 = null;
+
 
   constructor(
-    private dashboardSrv: DashboardService,
     private ngZone: NgZone,
     private cdr: ChangeDetectorRef
   ) {}
@@ -50,15 +42,53 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.chart1) {
       this.chart1.destroy();
     }
-    if (this.chart2) {
-      this.chart2.destroy();
-    }
   }
 
   initChart() {
-    this.chart1 = new ApexCharts(document.querySelector('#chart1'), this.charts[0]);
+    this.chart1 = new ApexCharts(document.querySelector('#chart1'), {
+      chart: {
+        height: 350,
+        type: 'area',
+        toolbar: false,
+      },
+      dataLabels: {
+        enabled: false,
+      },
+      stroke: {
+        curve: 'smooth',
+      },
+      series: [
+        {
+          name: 'Sale',
+          data: [31, 40, 28, 51, 42, 109, 100],
+        },
+        {
+          name: 'Purchase',
+          data: [11, 32, 45, 32, 34, 52, 41],
+        },
+      ],
+      xaxis: {
+        type: 'datetime',
+        categories: [
+          '2019-11-24T00:00:00',
+          '2019-11-24T01:30:00',
+          '2019-11-24T02:30:00',
+          '2019-11-24T03:30:00',
+          '2019-11-24T04:30:00',
+          '2019-11-24T05:30:00',
+          '2019-11-24T06:30:00',
+        ],
+      },
+      tooltip: {
+        x: {
+          format: 'dd/MM/yy HH:mm',
+        },
+      },
+      legend: {
+        position: 'top',
+        horizontalAlign: 'right',
+      },
+    });
     this.chart1.render();
-    this.chart2 = new ApexCharts(document.querySelector('#chart2'), this.charts[1]);
-    this.chart2.render();
   }
 }

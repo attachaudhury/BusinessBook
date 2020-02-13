@@ -1037,6 +1037,35 @@ app.get("/api/accounting/purchaseget", async (req, res, next) => {
   var result = await product.find({});
   
 })
+app.get("/api/accounting/getdashboarddata", async (req, res, next) => {
+  console.log('/api/accounting/getdashboarddata')
+  try
+  {
+    var result = {
+      invertorytotal:0,
+      cashtotal:0,      
+      possalethismonth:0,
+      possaletoday:0,
+      profitthismonth:0,
+      profittoday:0,
+    }
+    result.invertorytotal = await financetransaction.find({financeaccount:chartofaccount.inventoryaccount._id}).count();
+    res.status(201).json({
+      status: "success",
+      data:result
+    })
+  }catch(Exception)
+  {
+    console.log(Exception)
+    res.status(201).json({
+      status: "failed",
+      message:'can not get result',
+      ex:Exception.message,
+    })
+  }
+  var result = await product.find({});
+  
+})
 //#endregion accounting
 
 
