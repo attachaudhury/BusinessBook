@@ -8,7 +8,7 @@ const financetransaction = mongoose.Schema({
     financeaccount:{type:mongoose.Schema.ObjectId,ref:"financeaccount"},
     group:{type:mongoose.Schema.ObjectId,ref:"user"},
     others:[{key:String,value:String}],
-    soldproducts:[{_id:{type:mongoose.Schema.ObjectId,ref:"product"},name:String,saleprice:Number,quantity:Number,total:Number}],
+    products:[{}],
     status:String,
     user:{type:mongoose.Schema.ObjectId,ref:"user"},
 })

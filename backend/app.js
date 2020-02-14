@@ -38,11 +38,10 @@ app.use(express.static("public"));
 var chartofaccount={
   cashaccount:null,
   inventoryaccount:null,
-  possaleccount:null,
+  possaleaccount:null,
   csgaccount:null,
 };
 //dbsetting();
-//loadcharofaccount()
 async function dbsetting() {
   await user.remove({});
   await category.remove({});
@@ -113,7 +112,7 @@ async function dbsetting() {
   chartofaccount.inventoryaccount = await financeaccount.create({name:'inventory',type:'asset'});
   
 }
-
+loadcharofaccount()
 async function loadcharofaccount(){
   chartofaccount.possaleaccount = await financeaccount.findOne({name:"pos sale"});
   chartofaccount.cashaccount = await financeaccount.findOne({name:"cash"});
@@ -933,6 +932,7 @@ app.post("/api/accounting/possalenew",checkAuth,async (req, res, next) => {
       return total+currentelement.total;
     },0);
 
+    console.log(soldproducts)
     var soldproductpurchasetotal = 0;
     for (let index = 0; index < soldproducts.length; index++) {
       const element = await product.findById(soldproducts[index]._id);
@@ -956,6 +956,7 @@ app.post("/api/accounting/possalenew",checkAuth,async (req, res, next) => {
     })
   }catch(ex)
   {
+    console.log(ex)
     res.status(201).json({
       status: "failed",
       message:'item not found!',
@@ -1049,15 +1050,22 @@ app.get("/api/accounting/dashboarddataget", async (req, res, next) => {
       profitthismonth:0,
       profittoday:0,
     }
-    result.invertorytotal = await financetransaction.aggregate(
+    var accountsresult = (await financetransaction.aggregate(
       [
-        {$match:{financeaccount:chartofaccount.inventoryaccount._id}},
-        {$group:{_id:null,sum:{$sum:"$amount"}}}
+        {$group:{_id:"$financeaccount",amount:{$sum:"$amount"}}},
+        {$lookup:{
+          from:"financeaccount",
+          localField:"_id",
+          foreignField:"_id",
+          as:"result"
+        }},
+        {$unwind:"$result"},
+        {$project:{amount:1,name:"$result.name"}}
       ]
-      ).count();
+      ));
     res.status(201).json({
       status: "success",
-      data:result
+      data:accountsresult
     })
   }catch(Exception)
   {
