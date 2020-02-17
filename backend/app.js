@@ -1063,51 +1063,14 @@ app.get("/api/accounting/dashboarddataget", async (req, res, next) => {
         {$project:{amount:1,name:"$result.name"}}
       ]
       ));
-      var chartofaccountbalancepastsevenday = (await financetransaction.aggregate([{
-        $match: {
-            createdata: {
-                $gte: new Date("2020-02-09T00:00:00.000+05:00"),
-                $lte: new Date("2020-02-15T00:00:00.000+05:00")
-            }
-        }
-      }, {
-        $project: {
-            _id: 0,
-            financeaccount: 1,
-            day: {
-                $dayOfWeek: "$createdata"
-            },
-            amount: 1
-        }
-      }, {
-        $group: {
-            _id: {
-                day: "$day",
-                financeaccount: "$financeaccount"
-            },
-            amount: {
-                $sum: "$amount"
-            }
-        }
-      }, {
-        $lookup: {
-            from: "financeaccount",
-            localField: "_id.financeaccount",
-            foreignField: "_id",
-            as: "result"
-        }
-      }, {
-        $unwind: "$result"
-      }, {
-        $project: {
-            _id: 0,
-            daynumber: "$_id.day",
-            financeaccount: "$_id.financeaccount",
-            amount: 1,
-            name: "$result.name"
-        }
-      }])
-      )
+      var sevendaysbackdate = new Date((new Date()).setDate((new Date().getDate())-7)).setHours(0,0);
+      var chartofaccountbalancepastsevenday = (await financetransaction.aggregate([
+        {$match: {createdata: {$gte: sevendaysbackdate,$lte: Date.now()}}}, 
+        {$group: {_id: {financeaccount: "$financeaccount",dayofyear:{$dayOfYear:"$createdata"}},amount: {$sum: "$amount"},date:{$max: "$createddate"}}}, 
+        {$lookup: {from: "financeaccount",localField: "_id.financeaccount",foreignField: "_id",as: "result"}}, {$unwind: "$result"}, 
+        {$project: {_id: 0,financeaccount: "$_id.financeaccount",amount: 1,name: "$result.name",date:1}}
+      ]).sort({date:1})
+    )
     res.status(201).json({
       status: "success",
       data:chartofaccountbalancetotal,
