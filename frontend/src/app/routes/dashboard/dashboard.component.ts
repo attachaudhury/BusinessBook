@@ -27,6 +27,8 @@ import { HttpService } from '@core';
 export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   chart1 = null;
+  chartofaccountbalancetotal={};
+  chartofaccountbalancepastsevendays={};
 
 
   constructor(
@@ -100,6 +102,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.httpService.accountingdashboarddataget().then(result=>{
       console.log('dashboard data');
       console.log(result);
+      if(result['status']=="success"){
+        this.chartofaccountbalancetotal = result['data']['chartofaccountbalancetotal']
+        this.chartofaccountbalancepastsevendays = result['data']['chartofaccountbalancepastsevendays']
+      }
     })
   }
 }

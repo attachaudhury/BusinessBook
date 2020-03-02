@@ -129,6 +129,7 @@ export class PosComponent implements OnInit {
     product.quantity=1;
     product['price'] = product.saleprice;
     product['total'] = product.saleprice;
+    delete product.saleprice;
     this.cart.push(product);
     this.cart = [...this.cart];
     this.updatecarttotal();

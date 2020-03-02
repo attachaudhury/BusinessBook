@@ -35,6 +35,13 @@ export class PurchaseComponent implements OnInit {
     this.getpagedata();
     this.changesearchmode({ checked: false });
   }
+  getpagedata() {
+    this.httpservice.productget().then(res => {
+      if (res["status"] == "success") {
+        this.products = res["data"];
+      }
+    });
+  }
   changesearchmode(event) {
     this.scanningmode = event.checked;
     if (this.scanningmode) {
@@ -52,13 +59,6 @@ export class PurchaseComponent implements OnInit {
         this.filteredproducts = tmpproducts.splice(0, 5);
       })
     }
-  }
-  getpagedata() {
-    this.httpservice.productget().then(res => {
-      if (res["status"] == "success") {
-        this.products = res["data"];
-      }
-    });
   }
   searchtextcontrolselectedoption(event: any) {
     this.selectedproduct = null;
@@ -129,6 +129,7 @@ export class PurchaseComponent implements OnInit {
     product.quantity=1;
     product['price'] = product.purchaseprice;
     product['total'] = product.purchaseprice;
+    delete product.purchaseprice
     this.cart.push(product);
     this.cart = [...this.cart];
     this.updatecarttotal();

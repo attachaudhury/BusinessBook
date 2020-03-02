@@ -35,11 +35,11 @@ app.use((req, res, next) => {
 });
 
 app.use(express.static("public"));
-var chartofaccount={
-  cashaccount:null,
-  inventoryaccount:null,
-  possaleaccount:null,
-  csgaccount:null,
+var chartofaccount = {
+  cashaccount: null,
+  inventoryaccount: null,
+  possaleaccount: null,
+  csgaccount: null,
 };
 //dbsetting();
 async function dbsetting() {
@@ -86,38 +86,38 @@ async function dbsetting() {
   }).catch(err => {
     console.log(err)
   })
-  product.create({name:'milkpack',purchaseprice:30,saleprice:40})
-  product.create({name:'pepsi',purchaseprice:20,saleprice:25})
-  product.create({name:'pampers',purchaseprice:700,saleprice:800})
+  product.create({ name: 'milkpack', purchaseprice: 30, saleprice: 40 })
+  product.create({ name: 'pepsi', purchaseprice: 20, saleprice: 25 })
+  product.create({ name: 'pampers', purchaseprice: 700, saleprice: 800 })
 
-  var elec = new category({name: "Electronics"});
+  var elec = new category({ name: "Electronics" });
   await elec.save();
-  
-  var mob = new category({name: "Mobiles"});
+
+  var mob = new category({ name: "Mobiles" });
   mob.parentId = elec._id;
   await mob.save();
 
-  var tv = new category({name: "Tv"});
+  var tv = new category({ name: "Tv" });
   tv.parentId = elec._id;
   await tv.save();
-  
-  var cl = new category({name: "Clothes"});
+
+  var cl = new category({ name: "Clothes" });
   await cl.save();
-  
+
 
   // assets account
-  chartofaccount.possaleccount = await financeaccount.create({name:'pos sale',type:'income'});
-  chartofaccount.cashaccount = await financeaccount.create({name:'cash',type:'asset'});
-  chartofaccount.csgaccount = await financeaccount.create({name:'cost of goods sold',type:'expence'});
-  chartofaccount.inventoryaccount = await financeaccount.create({name:'inventory',type:'asset'});
-  
+  chartofaccount.possaleccount = await financeaccount.create({ name: 'pos sale', type: 'income' });
+  chartofaccount.cashaccount = await financeaccount.create({ name: 'cash', type: 'asset' });
+  chartofaccount.csgaccount = await financeaccount.create({ name: 'cost of goods sold', type: 'expence' });
+  chartofaccount.inventoryaccount = await financeaccount.create({ name: 'inventory', type: 'asset' });
+
 }
 loadcharofaccount()
-async function loadcharofaccount(){
-  chartofaccount.possaleaccount = await financeaccount.findOne({name:"pos sale"});
-  chartofaccount.cashaccount = await financeaccount.findOne({name:"cash"});
-  chartofaccount.cgsaccount = await financeaccount.findOne({name:"cost of goods sold"});
-  chartofaccount.inventoryaccount = await financeaccount.findOne({name:"inventory"});
+async function loadcharofaccount() {
+  chartofaccount.possaleaccount = await financeaccount.findOne({ name: "pos sale" });
+  chartofaccount.cashaccount = await financeaccount.findOne({ name: "cash" });
+  chartofaccount.cgsaccount = await financeaccount.findOne({ name: "cost of goods sold" });
+  chartofaccount.inventoryaccount = await financeaccount.findOne({ name: "inventory" });
 }
 app.get("/", (req, res, next) => {
   res.status(201).json({
@@ -173,7 +173,7 @@ app.post("/api/user/updateprofile", checkAuth, async (req, res, next) => {
       res.status(201).json({
         status: "failed",
         message: 'Not saved.',
-        ex:err.message,
+        ex: err.message,
       })
     })
   } catch (ex) {
@@ -222,8 +222,8 @@ app.post("/api/user/updateprofileimage", checkAuth, async (req, res, next) => {
         }).catch(err => {
           res.status(201).json({
             status: "failed",
-            message:"Not Saved.",
-            ex:err.message
+            message: "Not Saved.",
+            ex: err.message
           });
         })
     })
@@ -397,7 +397,7 @@ app.post("/api/user/delete", checkAuth, async (req, res, next) => {
             message: 'Not saved.'
           })
         })
-      }else{
+      } else {
         res.status(201).json({
           status: "failed",
           message: 'Admin cannot be removed'
@@ -412,40 +412,37 @@ app.post("/api/user/delete", checkAuth, async (req, res, next) => {
     })
   }
 })
-app.post("/api/user/getonebyid",async (req, res, next) => {
-  try
-  {
-    if(!req.body._id){
+app.post("/api/user/getonebyid", async (req, res, next) => {
+  try {
+    if (!req.body._id) {
       res.status(201).json({
         status: "failed",
-        message:'Id empty',
+        message: 'Id empty',
       });
     }
-    
-    var result = await user.findOne({_id:req.body._id});
-    if(result){
+
+    var result = await user.findOne({ _id: req.body._id });
+    if (result) {
       res.status(201).json({
         status: "success",
-        data:result,
+        data: result,
 
       })
     }
-    else
-    {
+    else {
       res.status(201).json({
         status: "failed",
-        message:'User not found!'
+        message: 'User not found!'
       })
     }
-  }catch(ex)
-  {
+  } catch (ex) {
     res.status(201).json({
       status: "failed",
-      message:'User not found!',
-      ex:ex.message
+      message: 'User not found!',
+      ex: ex.message
     });
   }
-  
+
 })
 app.post("/api/user/update", checkAuth, async (req, res, next) => {
   try {
@@ -484,7 +481,7 @@ app.post("/api/user/update", checkAuth, async (req, res, next) => {
       })
       return;
     }
-    var result = await user.findByIdAndUpdate(req.body._id,{...req.body},{new:true});
+    var result = await user.findByIdAndUpdate(req.body._id, { ...req.body }, { new: true });
     if (result) {
       res.status(201).json({
         status: "success",
@@ -578,515 +575,493 @@ app.get("/api/category", async (req, res, next) => {
   var result = await category.GetFullArrayTree();
   res.status(201).json({
     status: "success",
-    data:result
+    data: result
   })
 })
-app.post("/api/category/getonebyid",async (req, res, next) => {
-  try
-  {
-    if(!req.body._id){
+app.post("/api/category/getonebyid", async (req, res, next) => {
+  try {
+    if (!req.body._id) {
       res.status(201).json({
         status: "failed",
-        message:'Id empty',
+        message: 'Id empty',
       });
     }
-    
-    var result = await category.findOne({_id:req.body._id});
-    if(result){
+
+    var result = await category.findOne({ _id: req.body._id });
+    if (result) {
       res.status(201).json({
         status: "success",
-        data:result,
+        data: result,
 
       })
     }
-    else
-    {
+    else {
       res.status(201).json({
         status: "failed",
-        message:'Item not found!'
+        message: 'Item not found!'
       })
     }
-  }catch(ex)
-  {
+  } catch (ex) {
     res.status(201).json({
       status: "failed",
-      message:'item not found!',
-      ex:ex.message
+      message: 'item not found!',
+      ex: ex.message
     });
   }
-  
+
 })
-app.post("/api/category/add",async (req, res, next) => {
-  try
-  {
-    if(!req.body.name){
+app.post("/api/category/add", async (req, res, next) => {
+  try {
+    if (!req.body.name) {
       res.status(201).json({
         status: "failed",
-        message:'Name empty',
+        message: 'Name empty',
       });
     }
     var obj = new category({
-      name:req.body.name,
+      name: req.body.name,
     });
-    if(req.body.parentId)
-    {
-      obj.parentId =  req.body.parentId;
+    if (req.body.parentId) {
+      obj.parentId = req.body.parentId;
     }
     var result = await obj.save();
-    if(result){
+    if (result) {
       res.status(201).json({
         status: "success",
-        data:result,
+        data: result,
 
       })
     }
-    else
-    {
+    else {
       res.status(201).json({
         status: "failed",
-        message:'Item not saved!'
+        message: 'Item not saved!'
       })
     }
-  }catch(ex)
-  {
+  } catch (ex) {
     res.status(201).json({
       status: "failed",
-      message:'item not saved!!',
-      ex:ex.message
+      message: 'item not saved!!',
+      ex: ex.message
     });
   }
-  
+
 })
-app.post("/api/category/delete",async (req, res, next) => {
+app.post("/api/category/delete", async (req, res, next) => {
   console.log('category/delete request', req.body)
-  try
-  {
-    if(!req.body._id){
+  try {
+    if (!req.body._id) {
       res.status(201).json({
         status: "failed",
-        message:'Insufficient Data',
+        message: 'Insufficient Data',
       });
     }
 
-    var result = await category.findOne({_id:req.body._id});
-    if(result){
+    var result = await category.findOne({ _id: req.body._id });
+    if (result) {
       var children = await result.getChildren();
-      if(children.length>0)
-      {
+      if (children.length > 0) {
         res.status(201).json({
           status: "failed",
-          message:'This item has chidren, delete chlidren first !'
-        })  
-      }
-      else{
-        var result = await category.remove({_id:req.body._id});
-        res.status(201).json({
-          status: "success",
-          data:result,
+          message: 'This item has chidren, delete chlidren first !'
         })
       }
-      
+      else {
+        var result = await category.remove({ _id: req.body._id });
+        res.status(201).json({
+          status: "success",
+          data: result,
+        })
+      }
+
     }
-    else
-    {
+    else {
       res.status(201).json({
         status: "failed",
-        message:'Item not saved!'
+        message: 'Item not saved!'
       })
     }
-  }catch(ex)
-  {
+  } catch (ex) {
     console.log(ex)
     res.status(201).json({
       status: "failed",
-      message:'Please Try Later!',
-      ex:ex.message
+      message: 'Please Try Later!',
+      ex: ex.message
     });
   }
-  
+
 })
-app.post("/api/category/edit",async (req, res, next) => {
+app.post("/api/category/edit", async (req, res, next) => {
   console.log('category edit request');
   console.log(req.body);
-  try
-  {
-    if(!req.body.name){
+  try {
+    if (!req.body.name) {
       res.status(201).json({
         status: "failed",
-        message:'Name empty',
+        message: 'Name empty',
       });
     }
-    if(!req.body._id){
+    if (!req.body._id) {
       res.status(201).json({
         status: "failed",
-        message:'Name empty',
+        message: 'Name empty',
       });
     }
 
-    var result = await category.findByIdAndUpdate(req.body._id,{...req.body},{new:true});
-    if(result){
+    var result = await category.findByIdAndUpdate(req.body._id, { ...req.body }, { new: true });
+    if (result) {
       res.status(201).json({
         status: "success",
-        data:result,
+        data: result,
       })
     }
-    else
-    {
+    else {
       res.status(201).json({
         status: "failed",
-        message:'Item not saved!'
+        message: 'Item not saved!'
       })
     }
-  }catch(ex)
-  {
+  } catch (ex) {
     res.status(201).json({
       status: "failed",
-      message:'item not saved!!',
-      ex:ex.message
+      message: 'item not saved!!',
+      ex: ex.message
     });
   }
-  
+
 })
 //#endregion category
 
 //#region product
 app.get("/api/product", async (req, res, next) => {
   console.log('/api/product')
-  try
-  {
+  try {
     var result = await product.find({});
     res.status(201).json({
       status: "success",
-      data:result
+      data: result
     })
-  }catch(Exception)
-  {
+  } catch (Exception) {
     res.status(201).json({
       status: "failed",
-      message:'can not get result',
-      ex:Exception.message,
+      message: 'can not get result',
+      ex: Exception.message,
     })
   }
   var result = await product.find({});
-  
+
 })
-app.post("/api/product/getonebyid",async (req, res, next) => {
-  try
-  {
-    if(!req.body._id){
+app.post("/api/product/getonebyid", async (req, res, next) => {
+  try {
+    if (!req.body._id) {
       res.status(201).json({
         status: "failed",
-        message:'Id empty',
+        message: 'Id empty',
       });
     }
-    
-    var result = await product.findOne({_id:req.body._id});
-    if(result){
+
+    var result = await product.findOne({ _id: req.body._id });
+    if (result) {
       res.status(201).json({
         status: "success",
-        data:result,
+        data: result,
 
       })
     }
-    else
-    {
+    else {
       res.status(201).json({
         status: "failed",
-        message:'Item not found!'
+        message: 'Item not found!'
       })
     }
-  }catch(ex)
-  {
+  } catch (ex) {
     res.status(201).json({
       status: "failed",
-      message:'item not found!',
-      ex:ex.message
+      message: 'item not found!',
+      ex: ex.message
     });
   }
-  
+
 })
-app.post("/api/product/add",async (req, res, next) => {
-  try
-  {
-    if(!req.body.name){
+app.post("/api/product/add", async (req, res, next) => {
+  try {
+    if (!req.body.name) {
       res.status(201).json({
         status: "failed",
-        message:'Name empty',
+        message: 'Name empty',
       });
     }
     var obj = new product({
       ...req.body
     });
     var result = await obj.save();
-    if(result){
+    if (result) {
       res.status(201).json({
         status: "success",
-        data:result,
+        data: result,
       })
     }
-    else
-    {
+    else {
       res.status(201).json({
         status: "failed",
-        message:'Item not saved!'
+        message: 'Item not saved!'
       })
     }
-  }catch(ex)
-  {
+  } catch (ex) {
     res.status(201).json({
       status: "failed",
-      message:'item not saved!!',
-      ex:ex.message
+      message: 'item not saved!!',
+      ex: ex.message
     });
   }
-  
+
 })
-app.post("/api/product/delete",async (req, res, next) => {
+app.post("/api/product/delete", async (req, res, next) => {
   console.log('product/delete request', req.body)
-  try
-  {
-    if(!req.body._id){
+  try {
+    if (!req.body._id) {
       res.status(201).json({
         status: "failed",
-        message:'Insufficient Data',
+        message: 'Insufficient Data',
       });
     }
 
-    var result = await product.findOne({_id:req.body._id});
-    if(result){
-      var result = await product.remove({_id:req.body._id});
-        res.status(201).json({
-          status: "success",
-          data:result,
-        })
-    }
-    else
-    {
+    var result = await product.findOne({ _id: req.body._id });
+    if (result) {
+      var result = await product.remove({ _id: req.body._id });
       res.status(201).json({
-        status: "failed",
-        message:'Item not saved!'
+        status: "success",
+        data: result,
       })
     }
-  }catch(ex)
-  {
+    else {
+      res.status(201).json({
+        status: "failed",
+        message: 'Item not saved!'
+      })
+    }
+  } catch (ex) {
     console.log(ex)
     res.status(201).json({
       status: "failed",
-      message:'Please Try Later!',
-      ex:ex.message
+      message: 'Please Try Later!',
+      ex: ex.message
     });
   }
-  
+
 })
-app.post("/api/product/edit",async (req, res, next) => {
+app.post("/api/product/edit", async (req, res, next) => {
   console.log('product edit request');
   console.log(req.body);
-  try
-  {
-    if(!req.body.name){
+  try {
+    if (!req.body.name) {
       res.status(201).json({
         status: "failed",
-        message:'Name empty',
+        message: 'Name empty',
       });
     }
-    if(!req.body._id){
+    if (!req.body._id) {
       res.status(201).json({
         status: "failed",
-        message:'Id empty',
+        message: 'Id empty',
       });
     }
 
-    var result = await product.findByIdAndUpdate(req.body._id,{...req.body},{new:true});
-    if(result){
+    var result = await product.findByIdAndUpdate(req.body._id, { ...req.body }, { new: true });
+    if (result) {
       res.status(201).json({
         status: "success",
-        data:result,
+        data: result,
       })
     }
-    else
-    {
+    else {
       res.status(201).json({
         status: "failed",
-        message:'Item not saved!'
+        message: 'Item not saved!'
       })
     }
-  }catch(ex)
-  {
+  } catch (ex) {
     res.status(201).json({
       status: "failed",
-      message:'item not saved!!',
-      ex:ex.message
+      message: 'item not saved!!',
+      ex: ex.message
     });
   }
-  
+
 })
 //#endregion product
 
 //#region accounting
-app.post("/api/accounting/possalenew",checkAuth,async (req, res, next) => {
-  try
-  {
+app.post("/api/accounting/possalenew", checkAuth, async (req, res, next) => {
+  try {
     console.log('accounting/possalenew');
     var soldproducts = req.body.list;
-    var soldproducttotal = soldproducts.reduce(function(total,currentelement){
-      return total+currentelement.total;
-    },0);
+    var soldproducttotal = soldproducts.reduce(function (total, currentelement) {
+      return total + currentelement.total;
+    }, 0);
 
     console.log(soldproducts)
     var soldproductpurchasetotal = 0;
     for (let index = 0; index < soldproducts.length; index++) {
       const element = await product.findById(soldproducts[index]._id);
-      soldproductpurchasetotal+= (element.purchaseprice*soldproducts[index].quantity)
+      soldproductpurchasetotal += (element.purchaseprice * soldproducts[index].quantity)
     }
 
-    var possaletransaction = await financetransaction.create({amount:-soldproducttotal,description:'sale',financeaccount:chartofaccount.possaleaccount._id,products:soldproducts,status:'posted',user:req.userid});
+    var possaletransaction = await financetransaction.create({ amount: -soldproducttotal, description: 'sale', financeaccount: chartofaccount.possaleaccount._id, products: soldproducts, status: 'posted', user: req.userid });
 
-    await financetransaction.findByIdAndUpdate(possaletransaction._id,{group:possaletransaction._id});
+    await financetransaction.findByIdAndUpdate(possaletransaction._id, { group: possaletransaction._id });
 
-    var cashtransaction = await financetransaction.create({amount:soldproducttotal,description:'cash against sale '+possaletransaction._id,financeaccount:chartofaccount.cashaccount._id,group:possaletransaction._id,status:'posted',user:req.userid});
+    var cashtransaction = await financetransaction.create({ amount: soldproducttotal, description: 'cash against sale ' + possaletransaction._id, financeaccount: chartofaccount.cashaccount._id, group: possaletransaction._id, status: 'posted', user: req.userid });
 
 
-    var cgstransaction = await financetransaction.create({amount:soldproductpurchasetotal,description:'cgs against sale '+possaletransaction._id,financeaccount:chartofaccount.cgsaccount._id,group:possaletransaction._id,status:'posted',user:req.userid});
+    var cgstransaction = await financetransaction.create({ amount: soldproductpurchasetotal, description: 'cgs against sale ' + possaletransaction._id, financeaccount: chartofaccount.cgsaccount._id, group: possaletransaction._id, status: 'posted', user: req.userid });
 
-    var inventorytransaction = await financetransaction.create({amount:-soldproductpurchasetotal,description:'inventory against sale '+possaletransaction._id,financeaccount:chartofaccount.inventoryaccount._id,group:possaletransaction._id,status:'posted',user:req.userid});
+    var inventorytransaction = await financetransaction.create({ amount: -soldproductpurchasetotal, description: 'inventory against sale ' + possaletransaction._id, financeaccount: chartofaccount.inventoryaccount._id, group: possaletransaction._id, status: 'posted', user: req.userid });
 
     res.status(201).json({
       status: "success",
-      data:possaletransaction._id,
+      data: possaletransaction._id,
     })
-  }catch(ex)
-  {
+  } catch (ex) {
     console.log(ex)
     res.status(201).json({
       status: "failed",
-      message:'item not found!',
-      ex:ex.message
+      message: 'item not found!',
+      ex: ex.message
     });
   }
 })
 
 app.get("/api/accounting/possaleget", async (req, res, next) => {
   console.log('/api/accounting/possaleget')
-  try
-  {
-    var result = await financetransaction.find({financeaccount:chartofaccount.possaleaccount._id}).sort({_id:-1});
+  try {
+    var result = await financetransaction.find({ financeaccount: chartofaccount.possaleaccount._id }).sort({ _id: -1 });
     res.status(201).json({
       status: "success",
-      data:result
+      data: result
     })
-  }catch(Exception)
-  {
+  } catch (Exception) {
     console.log(Exception)
     res.status(201).json({
       status: "failed",
-      message:'can not get result',
-      ex:Exception.message,
+      message: 'can not get result',
+      ex: Exception.message,
     })
   }
   var result = await product.find({});
-  
+
 })
-app.post("/api/accounting/purchasenew",checkAuth,async (req, res, next) => {
-  try
-  {
+app.post("/api/accounting/purchasenew", checkAuth, async (req, res, next) => {
+  try {
     console.log('accounting/purchasenew');
     var purchasedproducts = req.body.list;
-    var purchasedproductstotal = purchasedproducts.reduce(function(total,currentelement){
-      return total+currentelement.total;
-    },0);
+    var purchasedproductstotal = purchasedproducts.reduce(function (total, currentelement) {
+      return total + currentelement.total;
+    }, 0);
 
 
-    var inventorytransaction = await financetransaction.create({amount:purchasedproductstotal,description:'purchase',financeaccount:chartofaccount.inventoryaccount._id,products:purchasedproducts,status:'posted',user:req.userid});
+    var inventorytransaction = await financetransaction.create({ amount: purchasedproductstotal, description: 'purchase', financeaccount: chartofaccount.inventoryaccount._id, products: purchasedproducts, status: 'posted', user: req.userid });
 
 
-    await financetransaction.findByIdAndUpdate(inventorytransaction._id,{group:inventorytransaction._id});
+    await financetransaction.findByIdAndUpdate(inventorytransaction._id, { group: inventorytransaction._id });
 
-    var cashtransaction = await financetransaction.create({amount:-purchasedproductstotal,description:'cash against purchase '+inventorytransaction._id,financeaccount:chartofaccount.cashaccount._id,group:inventorytransaction._id,status:'posted',user:req.userid});
+    var cashtransaction = await financetransaction.create({ amount: -purchasedproductstotal, description: 'cash against purchase ' + inventorytransaction._id, financeaccount: chartofaccount.cashaccount._id, group: inventorytransaction._id, status: 'posted', user: req.userid });
 
-    
+
     res.status(201).json({
       status: "success",
-      data:inventorytransaction._id,
+      data: inventorytransaction._id,
     })
-  }catch(ex)
-  {
+  } catch (ex) {
     res.status(201).json({
       status: "failed",
-      message:'item not found!',
-      ex:ex.message
+      message: 'item not found!',
+      ex: ex.message
     });
   }
 })
 app.get("/api/accounting/purchaseget", async (req, res, next) => {
   console.log('/api/accounting/purchaseget')
-  try
-  {
-    var result = await financetransaction.find({financeaccount:chartofaccount.inventoryaccount._id,amount:{$gt:0},description:'purchase'}).sort({_id:-1});
+  try {
+    var result = await financetransaction.find({ financeaccount: chartofaccount.inventoryaccount._id, amount: { $gt: 0 }, description: 'purchase' }).sort({ _id: -1 });
     res.status(201).json({
       status: "success",
-      data:result
+      data: result
     })
-  }catch(Exception)
-  {
+  } catch (Exception) {
     console.log(Exception)
     res.status(201).json({
       status: "failed",
-      message:'can not get result',
-      ex:Exception.message,
+      message: 'can not get result',
+      ex: Exception.message,
     })
   }
   var result = await product.find({});
-  
+
 })
 app.get("/api/accounting/dashboarddataget", async (req, res, next) => {
   console.log('/api/accounting/dashboarddataget')
-  try
-  {
+  try {
     var result = {
-      invertorytotal:0,
-      cashtotal:0,      
-      possalethismonth:0,
-      possaletoday:0,
-      profitthismonth:0,
-      profittoday:0,
+      invertorytotal: 0,
+      cashtotal: 0,
+      possalethismonth: 0,
+      possaletoday: 0,
+      profitthismonth: 0,
+      profittoday: 0,
     }
-    var chartofaccountbalancetotal = (await financetransaction.aggregate(
+    var chartofaccountbalancetotalraw = (await financetransaction.aggregate(
       [
-        {$group:{_id:"$financeaccount",amount:{$sum:"$amount"}}},
-        {$lookup:{
-          from:"financeaccount",
-          localField:"_id",
-          foreignField:"_id",
-          as:"result"
-        }},
-        {$unwind:"$result"},
-        {$project:{amount:1,name:"$result.name"}}
+        { $group: { _id: "$financeaccount", amount: { $sum: "$amount" } } },
+        {
+          $lookup: {
+            from: "financeaccount",
+            localField: "_id",
+            foreignField: "_id",
+            as: "result"
+          }
+        },
+        { $unwind: "$result" },
+        { $project: { amount: 1, name: "$result.name" } }
       ]
-      ));
-      var sevendaysbackdate = new Date((new Date()).setDate((new Date().getDate())-7)).setHours(0,0);
-      var chartofaccountbalancepastsevenday = (await financetransaction.aggregate([
-        {$match: {createdata: {$gte: sevendaysbackdate,$lte: Date.now()}}}, 
-        {$group: {_id: {financeaccount: "$financeaccount",dayofyear:{$dayOfYear:"$createdata"}},amount: {$sum: "$amount"},date:{$max: "$createddate"}}}, 
-        {$lookup: {from: "financeaccount",localField: "_id.financeaccount",foreignField: "_id",as: "result"}}, {$unwind: "$result"}, 
-        {$project: {_id: 0,financeaccount: "$_id.financeaccount",amount: 1,name: "$result.name",date:1}}
-      ]).sort({date:1})
+    ));
+    chartofaccountbalancetotal ={};
+    chartofaccountbalancetotalraw.map(el=>{
+      chartofaccountbalancetotal[el.name]= el.amount    
+    });
+
+    var sevendaysbackdate = new Date(new Date((new Date()).setDate((new Date().getDate()) - 7)).setHours(0, 0));
+    var chartofaccountbalancepastsevendaysraw = (await financetransaction.aggregate([
+      { $match: { createddate: { $gte: sevendaysbackdate} } },
+    {$group: {_id: {financeaccount: "$financeaccount",dayofyear:{$dayOfYear:"$createddate"}},amount: {$sum: "$amount"},date:{$max: "$createddate"}}}, 
+    {$group:{_id:{financeaccount: "$_id.financeaccount"},items:{$push:{date:"$date",amount:"$amount"}}}},
+    {$lookup: {from: "financeaccount",localField: "_id.financeaccount",foreignField: "_id",as: "result"}}, { $unwind: "$result" },
+    {$project: { _id: 0, financeaccount: "$_id.financeaccount", amount: 1, name: "$result.name", datewisebalance:"$items" } }
+    
+    ])
     )
+    var chartofaccountbalancepastsevendays ={};
+    console.log(sevendaysbackdate);
+    for (let index = 0; index < 7; index++) {
+      
+    }
+
     res.status(201).json({
       status: "success",
-      data:chartofaccountbalancetotal,
-      data1:chartofaccountbalancepastsevenday
+      data:{
+        chartofaccountbalancetotal: chartofaccountbalancetotal,
+        chartofaccountbalancepastsevendays: chartofaccountbalancepastsevendays
+      }
+      
     })
-  }catch(Exception)
-  {
+  } catch (Exception) {
     console.log(Exception)
     res.status(201).json({
       status: "failed",
-      message:'can not get result',
-      ex:Exception.message,
+      message: 'can not get result',
+      ex: Exception.message,
     })
   }
-  var result = await product.find({});
-  
 })
 //#endregion accounting
 
