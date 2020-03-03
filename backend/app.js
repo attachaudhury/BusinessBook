@@ -1010,7 +1010,7 @@ app.get("/api/accounting/dashboarddataget", async (req, res, next) => {
       profitthismonth: 0,
       profittoday: 0,
     }
-    var chartofaccountbalancetotalraw = (await financetransaction.aggregate(
+    var chartofaccountbalancetotalarray = (await financetransaction.aggregate(
       [
         { $group: { _id: "$financeaccount", amount: { $sum: "$amount" } } },
         {
@@ -1025,34 +1025,58 @@ app.get("/api/accounting/dashboarddataget", async (req, res, next) => {
         { $project: { amount: 1, name: "$result.name" } }
       ]
     ));
-    chartofaccountbalancetotal ={};
-    chartofaccountbalancetotalraw.map(el=>{
-      chartofaccountbalancetotal[el.name]= el.amount    
+    chartofaccountbalancetotal = {};
+    chartofaccountbalancetotalarray.map(el => {
+      chartofaccountbalancetotal[el.name] = el.amount
     });
 
-    var sevendaysbackdate = new Date(new Date((new Date()).setDate((new Date().getDate()) - 7)).setHours(0, 0));
-    var chartofaccountbalancepastsevendaysraw = (await financetransaction.aggregate([
-      { $match: { createddate: { $gte: sevendaysbackdate} } },
-    {$group: {_id: {financeaccount: "$financeaccount",dayofyear:{$dayOfYear:"$createddate"}},amount: {$sum: "$amount"},date:{$max: "$createddate"}}}, 
-    {$group:{_id:{financeaccount: "$_id.financeaccount"},items:{$push:{date:"$date",amount:"$amount"}}}},
-    {$lookup: {from: "financeaccount",localField: "_id.financeaccount",foreignField: "_id",as: "result"}}, { $unwind: "$result" },
-    {$project: { _id: 0, financeaccount: "$_id.financeaccount", amount: 1, name: "$result.name", datewisebalance:"$items" } }
-    
+    var sevendaysbackdate = new Date(new Date((new Date()).setDate((new Date().getDate()) - 6)).setHours(0, 0));
+    var chartofaccountbalancepastsevendaysarrayraw = (await financetransaction.aggregate([
+      { $match: { createddate: { $gte: sevendaysbackdate } } },
+      { $group: { _id: { financeaccount: "$financeaccount", dayofyear: { $dayOfYear: "$createddate" } }, amount: { $sum: "$amount" }, date: { $max: "$createddate" } } },
+      { $group: { _id: { financeaccount: "$_id.financeaccount" }, items: { $push: { date: "$date", amount: "$amount" } } } },
+      { $lookup: { from: "financeaccount", localField: "_id.financeaccount", foreignField: "_id", as: "result" } }, { $unwind: "$result" },
+      { $project: { _id: 0, financeaccount: "$_id.financeaccount", amount: 1, name: "$result.name", datewisebalance: "$items" } }
+
     ])
     )
-    var chartofaccountbalancepastsevendays ={};
-    console.log(sevendaysbackdate);
-    for (let index = 0; index < 7; index++) {
-      
-    }
+    var chartofaccountbalancepastsevendaysarray = [];
+    chartofaccountbalancepastsevendaysarrayraw.map(element => {
+      var obj = {};
+      obj.name = element.name;
+      obj.financeaccount = element.financeaccount;
+      obj.datewisebalance = []
+      for (let index = 0; index < 7; index++) {
+        var startOfDate = new Date(new Date((new Date()).setDate((new Date().getDate()) - index)).setHours(0, 0));
+        var endOfDate = new Date(new Date((new Date()).setDate((new Date().getDate()) - index)).setHours(23, 59));
+        var objectexistsOnSpecificDate = element.datewisebalance.find(el => { return ((el.date >= startOfDate) && (el.date <= endOfDate)) })
+        var amountobject = {};
+        if (objectexistsOnSpecificDate) {
+          amountobject.amount = objectexistsOnSpecificDate.amount;
+          amountobject.date = startOfDate;
+
+        }
+        else {
+          amountobject.amount = 0;
+          amountobject.date = startOfDate;
+
+        }
+        obj.datewisebalance.push(amountobject);
+      }
+      chartofaccountbalancepastsevendaysarray.push(obj)
+    });
+    var chartofaccountbalancepastsevendays =[]
+    chartofaccountbalancepastsevendaysarray.map(el => {
+      chartofaccountbalancepastsevendays[el.name] = el.datewisebalance
+    });
 
     res.status(201).json({
       status: "success",
-      data:{
+      data: {
         chartofaccountbalancetotal: chartofaccountbalancetotal,
         chartofaccountbalancepastsevendays: chartofaccountbalancepastsevendays
       }
-      
+
     })
   } catch (Exception) {
     console.log(Exception)
