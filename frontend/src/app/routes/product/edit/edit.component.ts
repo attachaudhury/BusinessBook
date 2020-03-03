@@ -5,6 +5,9 @@ import { category } from '@shared/models/category';
 import { product } from '@shared/models/product';
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
+import { ProductService } from '@core/services/httpServices/product.service';
+import { CategoryService } from '@core/services/httpServices/category.service';
+import { AccountingService } from '@core/services/httpServices/accounting.service';
 
 @Component({
   selector: 'app-category-edit',
@@ -15,7 +18,7 @@ export class EditComponent implements OnInit {
   categories: category[];
   modelid: string = '';
   model:product;
-  constructor(private fb: FormBuilder, private httpService: HttpService, private activatedroute: ActivatedRoute,private matsnackbar: MatSnackBar) {
+  constructor(private fb: FormBuilder, private httpService: HttpService,private productService:ProductService,private categoryService:CategoryService,private accountingService:AccountingService, private activatedroute: ActivatedRoute,private matsnackbar: MatSnackBar) {
 
   }
 
@@ -26,7 +29,7 @@ export class EditComponent implements OnInit {
     })
   }
   async loadpagedata() {
-   var catresult = await this.httpService.categoryget();
+   var catresult = await this.categoryService.categoryget();
    console.log('category in add');
       console.log(catresult);
       if(catresult["status"]=="success")
@@ -34,7 +37,7 @@ export class EditComponent implements OnInit {
         this.categories = catresult["data"]
       }
   
-    var requestresponse = await this.httpService.productgetonebyid({ _id: this.modelid });
+    var requestresponse = await this.productService.productgetonebyid({ _id: this.modelid });
     console.log(requestresponse);
     if (requestresponse["status"] == "success") {
       
@@ -44,7 +47,7 @@ export class EditComponent implements OnInit {
   }
   async save() {
     if (this.model.name) {
-      var result = await this.httpService.productedit(this.model);
+      var result = await this.productService.productedit(this.model);
       console.log(result);
       if (result["status"] == "success") {
         this.matsnackbar.open('Updated','Close',{duration:3000})

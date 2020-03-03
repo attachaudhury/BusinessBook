@@ -8,6 +8,7 @@ import { MatSnackBar } from '@angular/material';
 import { DeleteConfirmationDialog } from '@shared/components/deleteconfimationdialog/deleteconfirmationdialog.component';
 import { element } from 'protractor';
 import { Router } from '@angular/router';
+import { AccountingService } from '@core/services/httpServices/accounting.service';
 
 @Component({
   selector: 'app-category-list',
@@ -18,6 +19,7 @@ export class PosSalesListComponent implements OnInit {
   selectedobject;
   constructor(
     private httpService:HttpService,
+    private accountingService:AccountingService,
     private matsnackbar: MatSnackBar,
     public dialog: MatDialog,
     private easyDialog: EasyDialog,private router :Router) {}
@@ -26,7 +28,7 @@ export class PosSalesListComponent implements OnInit {
   }
   async getpagedata()
   {
-    var result = await this.httpService.accountingpossaleget();
+    var result = await this.accountingService.accountingpossaleget();
     console.log('loaded getpagedata');
       console.log(result);
       if(result["status"]=="success")

@@ -4,6 +4,9 @@ import { HttpService } from '@core';
 import { category } from '@shared/models/category';
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
+import { ProductService } from '@core/services/httpServices/product.service';
+import { CategoryService } from '@core/services/httpServices/category.service';
+import { AccountingService } from '@core/services/httpServices/accounting.service';
 
 @Component({
   selector: 'app-category-edit',
@@ -14,7 +17,7 @@ export class EditComponent implements OnInit {
   categories: category[];
   selectedid: string = '';
   selecteditem;
-  constructor(private fb: FormBuilder, private httpService: HttpService, private activatedroute: ActivatedRoute,private matsnackbar: MatSnackBar) {
+  constructor(private fb: FormBuilder, private httpService: HttpService,private productService:ProductService,private categoryService:CategoryService,private accountingService:AccountingService, private activatedroute: ActivatedRoute,private matsnackbar: MatSnackBar) {
 
     this.reactiveForm2 = this.fb.group({
       name: ['', [Validators.required]],
@@ -28,7 +31,7 @@ export class EditComponent implements OnInit {
     })
   }
   async loadpagedata() {
-    var requestresponse = await this.httpService.categorygetonebyid({ _id: this.selectedid });
+    var requestresponse = await this.categoryService.categorygetonebyid({ _id: this.selectedid });
     if (requestresponse["status"] == "success") {
       
       this.selecteditem = requestresponse["data"];
@@ -38,7 +41,7 @@ export class EditComponent implements OnInit {
   }
   async save() {
     if (this.reactiveForm2.valid) {
-      var result = await this.httpService.categoryedit({_id:this.selecteditem['_id'],...this.reactiveForm2.value});
+      var result = await this.categoryService.categoryedit({_id:this.selecteditem['_id'],...this.reactiveForm2.value});
       console.log(result);
       if (result["status"] == "success") {
         //this.reactiveForm2.reset();

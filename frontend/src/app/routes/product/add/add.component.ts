@@ -4,6 +4,9 @@ import { HttpService } from '@core';
 import { category } from '@shared/models/category';
 import { product } from '@shared/models/product';
 import { MatSnackBar } from '@angular/material';
+import { AccountingService } from '@core/services/httpServices/accounting.service';
+import { CategoryService } from '@core/services/httpServices/category.service';
+import { ProductService } from '@core/services/httpServices/product.service';
 
 @Component({
   selector: 'app-category-add',
@@ -13,7 +16,7 @@ export class AddComponent implements OnInit {
   reactiveForm2: FormGroup;
   categories:category[];
   model:product = {};
-  constructor(private fb: FormBuilder, private httpService: HttpService,private matsnackbar:MatSnackBar) {
+  constructor(private fb: FormBuilder, private httpService: HttpService,private matsnackbar:MatSnackBar,private productService:ProductService,private categoryService:CategoryService,private accountingService:AccountingService) {
   }
 
   ngOnInit() {
@@ -22,7 +25,7 @@ export class AddComponent implements OnInit {
   async save() {
     if (this.model.name!='') {
       this.matsnackbar.open('Saving record','Close',{duration:2000})
-      var result =  await this.httpService.productadd(this.model);
+      var result =  await this.productService.productadd(this.model);
       console.log(result);
       if(result["status"]=="success")
       {
@@ -40,7 +43,7 @@ export class AddComponent implements OnInit {
   }
   getcategories()
   {
-    this.httpService.categoryget().then(res => {
+    this.categoryService.categoryget().then(res => {
       console.log('category in add');
       console.log(res);
       if(res["status"]=="success")

@@ -8,6 +8,9 @@ import { MatSnackBar } from '@angular/material';
 import { DeleteConfirmationDialog } from '@shared/components/deleteconfimationdialog/deleteconfirmationdialog.component';
 import { element } from 'protractor';
 import { Router } from '@angular/router';
+import { ProductService } from '@core/services/httpServices/product.service';
+import { CategoryService } from '@core/services/httpServices/category.service';
+import { AccountingService } from '@core/services/httpServices/accounting.service';
 
 @Component({
   selector: 'app-category-list',
@@ -17,7 +20,7 @@ export class ListComponent implements OnInit {
   categories:category[];
   selectedobject;
   constructor(
-    private httpService:HttpService,
+    private httpService:HttpService,private productService:ProductService,private categoryService:CategoryService,private accountingService:AccountingService,
     private matsnackbar: MatSnackBar,
     public dialog: MatDialog,
     private easyDialog: EasyDialog,private router :Router) {}
@@ -26,7 +29,7 @@ export class ListComponent implements OnInit {
   }
   getcategories()
   {
-    this.httpService.categoryget().then(res => {
+    this.categoryService.categoryget().then(res => {
       if(res["status"]=="success")
       {
        this.categories =  this.flattreesarray(res["data"]);
@@ -67,7 +70,7 @@ export class ListComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(async (result) => {
       if (result) {
-        var res  = await this.httpService.categorydelete({_id:this.selectedobject._id});
+        var res  = await this.categoryService.categorydelete({_id:this.selectedobject._id});
         console.log(res);
         if(res["status"]=="success")
         {

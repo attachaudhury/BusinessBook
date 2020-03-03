@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { isExpressionWithTypeArguments } from 'typescript';
 import { HttpService } from '@core';
+import { AccountingService } from '@core/services/httpServices/accounting.service';
 
 
 @Component({
@@ -33,8 +34,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private ngZone: NgZone,
-    private cdr: ChangeDetectorRef,
-    private httpService:HttpService
+    private accountingService:AccountingService,
+    
   ) {}
 
   ngOnInit() {
@@ -99,7 +100,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.chart1.render();
   }
   async initpage(){
-    this.httpService.accountingdashboarddataget().then(result=>{
+    this.accountingService.accountingdashboarddataget().then(result=>{
       console.log('dashboard data');
       console.log(result);
       if(result['status']=="success"){

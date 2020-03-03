@@ -6,6 +6,9 @@ import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms'
 import { Observable, Subscription } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material';
+import { ProductService } from '@core/services/httpServices/product.service';
+import { CategoryService } from '@core/services/httpServices/category.service';
+import { AccountingService } from '@core/services/httpServices/accounting.service';
 
 @Component({
   selector: 'app-pos',
@@ -28,7 +31,7 @@ export class PosComponent implements OnInit {
   carttotal: number = 0.0;
   scanningmode = false;
   selectedproduct: product = null;
-  constructor(private httpservice: HttpService, private matsnackbar: MatSnackBar) {
+  constructor(private httpservice: HttpService, private matsnackbar: MatSnackBar,private productService:ProductService,private categoryService:CategoryService,private accountingService:AccountingService) {
 
   }
   ngOnInit() {
@@ -54,7 +57,7 @@ export class PosComponent implements OnInit {
     }
   }
   getpagedata() {
-    this.httpservice.productget().then(res => {
+    this.productService.productget().then(res => {
       if (res["status"] == "success") {
         this.products = res["data"];
       }
@@ -98,7 +101,7 @@ export class PosComponent implements OnInit {
       }
       else if (eventkey == "End" && this.cart.length > 0) {
         this.matsnackbar.open('Sale in process', 'Close', {duration:2000})
-        var salestatus = await this.httpservice.accountingpossalenew({ list: this.cart })
+        var salestatus = await this.accountingService.accountingpossalenew({ list: this.cart })
         console.log(salestatus);
         if(salestatus['status']=='success')
         {

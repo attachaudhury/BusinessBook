@@ -1,6 +1,9 @@
 export * from './interceptors/default.interceptor';
 
 export * from './services/http.service';
+export * from './services/httpServices/accounting.service';
+export * from './services/httpServices/product.service';
+export * from './services/httpServices/category.service';
 export * from './services/menu.service';
 export * from './services/settings.service';
 export * from './services/startup.service';
