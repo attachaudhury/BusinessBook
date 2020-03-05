@@ -23,14 +23,13 @@ import { AccountingService } from '@core/services/httpServices/accounting.servic
       }
     `,
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.Default,
 })
 export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   chart1 = null;
   chartofaccountbalancetotal={};
   chartofaccountbalancepastsevendays={};
-
 
   constructor(
     private ngZone: NgZone,
@@ -100,13 +99,11 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.chart1.render();
   }
   async initpage(){
-    this.accountingService.accountingdashboarddataget().then(result=>{
-      console.log('dashboard data');
-      console.log(result);
-      if(result['status']=="success"){
-        this.chartofaccountbalancetotal = result['data']['chartofaccountbalancetotal']
-        this.chartofaccountbalancepastsevendays = result['data']['chartofaccountbalancepastsevendays']
-      }
-    })
+    var result = await this.accountingService.accountingdashboarddataget();
+    console.log(result)
+    if(result['status']=="success"){
+      this.chartofaccountbalancetotal = result['data']['chartofaccountbalancetotal']
+      this.chartofaccountbalancepastsevendays = result['data']['chartofaccountbalancepastsevendays']
+    }
   }
 }

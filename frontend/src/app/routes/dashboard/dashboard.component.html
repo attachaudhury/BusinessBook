@@ -7,7 +7,7 @@
     <mat-card class="bg-indigo-500 text-white">
       <mat-card-title class="f-s-12 f-w-100">Total Sales</mat-card-title>
       <mat-card-content>
-        <h2>180,200</h2>
+        <h2>{{ -chartofaccountbalancetotal["pos sale"] || 0 }}</h2>
         <easy-progress [value]="50"></easy-progress>
         <small class="text-muted">Total</small>
       </mat-card-content>
@@ -15,31 +15,31 @@
   </div>
   <div class="matero-col" fxFlex.gt-sm="25" fxFlex.gt-xs="50" fxFlex="100">
     <mat-card class="bg-blue-500 text-white">
-      <mat-card-title class="f-s-12 f-w-100">Revenue</mat-card-title>
+      <mat-card-title class="f-s-12 f-w-100">Inventory</mat-card-title>
       <mat-card-content>
-        <h2>70,205</h2>
+        <h2>{{ chartofaccountbalancetotal["inventory"] || 0 }}</h2>
         <easy-progress [value]="70"></easy-progress>
-        <small class="text-muted">Monthly</small>
+        <small class="text-muted">Total</small>
       </mat-card-content>
     </mat-card>
   </div>
   <div class="matero-col" fxFlex.gt-sm="25" fxFlex.gt-xs="50" fxFlex="100">
     <mat-card class="bg-green-500 text-white">
-      <mat-card-title class="f-s-12 f-w-100">Traffic</mat-card-title>
+      <mat-card-title class="f-s-12 f-w-100">Cash</mat-card-title>
       <mat-card-content>
-        <h2>1,291,922</h2>
+        <h2>{{ chartofaccountbalancetotal["cash"] || 0 }}</h2>
         <easy-progress [value]="80"></easy-progress>
-        <small class="text-muted">Monthly</small>
+        <small class="text-muted">Total</small>
       </mat-card-content>
     </mat-card>
   </div>
   <div class="matero-col" fxFlex.gt-sm="25" fxFlex.gt-xs="50" fxFlex="100">
     <mat-card class="bg-teal-500 text-white">
-      <mat-card-title class="f-s-12 f-w-100">New User</mat-card-title>
+      <mat-card-title class="f-s-12 f-w-100">CGS</mat-card-title>
       <mat-card-content>
-        <h2>1,922</h2>
+        <h2>{{ chartofaccountbalancetotal["cost of goods sold"] || 0 }}</h2>
         <easy-progress [value]="40"></easy-progress>
-        <small class="text-muted">Monthly</small>
+        <small class="text-muted">Total</small>
       </mat-card-content>
     </mat-card>
   </div>

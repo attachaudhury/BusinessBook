@@ -119,14 +119,6 @@ router.post("/possalenew", checkAuth, async (req, res, next) => {
     
     console.log('/dashboarddataget')
     try {
-      var result = {
-        invertorytotal: 0,
-        cashtotal: 0,
-        possalethismonth: 0,
-        possaletoday: 0,
-        profitthismonth: 0,
-        profittoday: 0,
-      }
       var chartofaccountbalancetotalarray = (await financetransaction.aggregate(
         [
           { $group: { _id: "$financeaccount", amount: { $sum: "$amount" } } },
@@ -147,6 +139,8 @@ router.post("/possalenew", checkAuth, async (req, res, next) => {
         chartofaccountbalancetotal[el.name] = el.amount
       });
   
+      
+      
       var sevendaysbackdate = new Date(new Date((new Date()).setDate((new Date().getDate()) - 6)).setHours(0, 0));
       var chartofaccountbalancepastsevendaysarrayraw = (await financetransaction.aggregate([
         { $match: { createddate: { $gte: sevendaysbackdate } } },
@@ -154,7 +148,6 @@ router.post("/possalenew", checkAuth, async (req, res, next) => {
         { $group: { _id: { financeaccount: "$_id.financeaccount" }, items: { $push: { date: "$date", amount: "$amount" } } } },
         { $lookup: { from: "financeaccount", localField: "_id.financeaccount", foreignField: "_id", as: "result" } }, { $unwind: "$result" },
         { $project: { _id: 0, financeaccount: "$_id.financeaccount", amount: 1, name: "$result.name", datewisebalance: "$items" } }
-  
       ])
       )
       var chartofaccountbalancepastsevendaysarray = [];
@@ -163,7 +156,7 @@ router.post("/possalenew", checkAuth, async (req, res, next) => {
         obj.name = element.name;
         obj.financeaccount = element.financeaccount;
         obj.datewisebalance = []
-        for (let index = 0; index < 7; index++) {
+        for (let index = 6; index >= 0; index--) {
           var startOfDate = new Date(new Date((new Date()).setDate((new Date().getDate()) - index)).setHours(0, 0));
           var endOfDate = new Date(new Date((new Date()).setDate((new Date().getDate()) - index)).setHours(23, 59));
           var objectexistsOnSpecificDate = element.datewisebalance.find(el => { return ((el.date >= startOfDate) && (el.date <= endOfDate)) })
@@ -182,11 +175,11 @@ router.post("/possalenew", checkAuth, async (req, res, next) => {
         }
         chartofaccountbalancepastsevendaysarray.push(obj)
       });
-      var chartofaccountbalancepastsevendays =[]
+      var chartofaccountbalancepastsevendays ={}
       chartofaccountbalancepastsevendaysarray.map(el => {
         chartofaccountbalancepastsevendays[el.name] = el.datewisebalance
       });
-  
+      console.log('sending result')
       res.status(201).json({
         status: "success",
         data: {

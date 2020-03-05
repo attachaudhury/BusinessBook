@@ -5,6 +5,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {Router} from '@angular/router';
 import { user } from '@shared/models/user';
 import { environment } from '@env/environment';
+import { resolve } from 'dns';
 
 @Injectable({
   providedIn: 'root',
@@ -75,24 +76,21 @@ export class HttpService {
         //console.log(this.user);
       }
     }
-    updateprofile(newdataobject) {
-      console.log('updateprofile')
-      var data = newdataobject
-      this.http.post < {
+    updateprofile(data) {
+
+      return new Promise((resolve)=>{
+        this.http.post < {
           status: string,
           data: any
         } > (environment.apiUrl + "user/updateprofile", data)
         .subscribe(res => {
-          console.log(res);
+          resolve(res)
           if (res.status == "success") {
-            this._snackBar.open("Information updated", 'Close', {
-              duration: 3000,
-            });
             this.user = res.data;
             localStorage.setItem("user", JSON.stringify(this.user));
-            this.userlistener.next(this.user);
           }
         })
+      })
     }
     updateprofileimage(profileimage) {
       const uploadData = new FormData();
