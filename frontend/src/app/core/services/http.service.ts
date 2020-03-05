@@ -92,21 +92,21 @@ export class HttpService {
         })
       })
     }
-    updateprofileimage(profileimage) {
-      const uploadData = new FormData();
-      uploadData.append('files', profileimage);
-      this.http.post < {
+    updateprofileimage(formData) {
+      return new Promise((resolve)=>{
+        this.http.post < {
           status: string,
           data: any
-        } > (environment.apiUrl + "user/updateprofileimage", uploadData)
+        } > (environment.apiUrl + "user/updateprofileimage", formData)
         .subscribe(res => {
-          console.log(res);
+          resolve(res);
           if (res.status == "success") {
-            this.user.profileimage = res.data.profileimage;
             localStorage.setItem("user", JSON.stringify(this.user));
-            this.userlistener.next(this.user);
           }
         })
+      })
+      
+      
     }
     useradd(data) {
       return new Promise((resolve,reject)=>{

@@ -16,4 +16,16 @@ export class ProfileLayoutComponent {
     this.environment = environment;
     console.log(environment)
   }
+  async updateProfileImage(event)
+  {
+    if(event.files>0){
+      const uploadData = new FormData();
+      uploadData.append('files', event.files[0]);
+      var result = this.httpService.updateprofileimage(uploadData);
+      if (result['status'] == "success") {
+        this.model = result['data'];
+      }
+    }
+    
+  }
 }

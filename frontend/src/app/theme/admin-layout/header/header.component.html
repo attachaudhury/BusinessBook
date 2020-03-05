@@ -6,12 +6,6 @@
   <app-branding *ngIf="showBranding"></app-branding>
   <span fxFlex></span>
 
-  <app-github-button></app-github-button>
-
-  <button mat-icon-button>
-    <mat-icon>search</mat-icon>
-  </button>
-
   <button mat-icon-button (click)="toggleFullscreen()" fxHide.lt-sm>
     <mat-icon>fullscreen</mat-icon>
   </button>
@@ -20,7 +14,4 @@
 
   <app-user></app-user>
 
-  <button mat-button class="matero-hamburger" (click)="toggleSidenavNotice.emit()" fxHide.lt-sm>
-    <mat-icon>list</mat-icon>
-  </button>
 </mat-toolbar>
