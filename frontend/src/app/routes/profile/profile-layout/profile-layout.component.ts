@@ -14,14 +14,19 @@ export class ProfileLayoutComponent {
   {
     this.model = this.httpService.user;
     this.environment = environment;
-    console.log(environment)
   }
-  async updateProfileImage(event)
+  dummyProfileImageChangedClicked(){
+    var imageinput =document.getElementById("profileImageInput") as HTMLElement;
+    imageinput.click();
+  }
+  async profileImageChanged(event)
   {
-    if(event.files>0){
+    if(event.target.files.length>0){
       const uploadData = new FormData();
-      uploadData.append('files', event.files[0]);
-      var result = this.httpService.updateprofileimage(uploadData);
+      uploadData.append('files', event.target.files[0]);
+      var result =await this.httpService.updateprofileimage(uploadData);
+      console.log('api result');
+      console.log(result);
       if (result['status'] == "success") {
         this.model = result['data'];
       }

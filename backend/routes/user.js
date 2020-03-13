@@ -77,20 +77,20 @@ router.post("/updateprofileimage", checkAuth, async (req, res, next) => {
       fse.moveSync(profileimage.path, "public" + profileimagename, {
         overwrite: true
       })
-      var radius = 75;
-      var data = fs.readFileSync("public" + profileimagename);
-      var png = PNG.sync.read(data);
-      var options = { filterType: 4 };
-      for (var y = 0; y < png.height; y++) {
-        for (var x = 0; x < png.width; x++) {
-          var idx = (png.width * y + x) << 2;
-          if (Math.pow(x - radius, 2) + Math.pow(y - radius, 2) > Math.pow(radius, 2)) {
-            png.data[idx + 3] = 0;
-          }
-        }
-      }
-      var buffer = PNG.sync.write(png, options);
-      fs.writeFileSync("public" + profileimagename, buffer);
+      // var radius = 75;
+      // var data = fs.readFileSync("public" + profileimagename);
+      // var png = PNG.sync.read(data);
+      // var options = { filterType: 4 };
+      // for (var y = 0; y < png.height; y++) {
+      //   for (var x = 0; x < png.width; x++) {
+      //     var idx = (png.width * y + x) << 2;
+      //     if (Math.pow(x - radius, 2) + Math.pow(y - radius, 2) > Math.pow(radius, 2)) {
+      //       png.data[idx + 3] = 0;
+      //     }
+      //   }
+      // }
+      // var buffer = PNG.sync.write(png, options);
+      // fs.writeFileSync("public" + profileimagename, buffer);
       user.findOneAndUpdate({
         _id: req.userid
       }, {

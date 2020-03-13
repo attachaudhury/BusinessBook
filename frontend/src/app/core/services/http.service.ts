@@ -101,6 +101,7 @@ export class HttpService {
         .subscribe(res => {
           resolve(res);
           if (res.status == "success") {
+            this.user = res.data;
             localStorage.setItem("user", JSON.stringify(this.user));
           }
         })
