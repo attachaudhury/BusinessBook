@@ -76,19 +76,27 @@
           <div fxFlex="25" fxFlex.lt-sm="100">
             <mat-form-field>
               <mat-label>Type</mat-label>
-              <input matInput placeholder="Quantity" [(ngModel)]="model.quantity" name="quantity">
+              <mat-select [(ngModel)]="model.type" name="type">
+                <mat-option  *ngFor="let cat of ['product','other']" value="{{cat}}">{{cat}}</mat-option>
+              </mat-select>
             </mat-form-field>
           </div>
           <div fxFlex="25" fxFlex.lt-sm="100">
             <mat-form-field>
               <mat-label>Purchasing</mat-label>
-              <input matInput placeholder="Quantity" [(ngModel)]="model.quantity" name="quantity">
+              <mat-select [(ngModel)]="model.purchaseactive" name="purchaseactive">
+                <mat-option [value]="true">true</mat-option>
+                <mat-option [value]="false">false</mat-option>
+              </mat-select>
             </mat-form-field>
           </div>
           <div fxFlex="25" fxFlex.lt-sm="100">
             <mat-form-field>
               <mat-label>Selling</mat-label>
-              <input matInput placeholder="Quantity" [(ngModel)]="model.quantity" name="quantity">
+              <mat-select [(ngModel)]="model.saleactive" name="saleactive">
+                <mat-option [value]="true">true</mat-option>
+                <mat-option [value]="false">false</mat-option>
+              </mat-select>
             </mat-form-field>
           </div>
 

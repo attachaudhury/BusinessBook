@@ -21,6 +21,7 @@ import { EasyDialogComponent } from './components/easy-dialog/easy-dialog.compon
 import { EasyTableComponent } from './components/easy-table/easy-table.component';
 import { EasyTableCellComponent } from './components/easy-table/easy-table-cell.component';
 import { DeleteConfirmationDialog } from './components/deleteconfimationdialog/deleteconfirmationdialog.component';
+import { ProductsListDialog } from './components/productslistdialog/productslistdialog.component';
 
 const THIRD_MODULES = [
   MaterialModule,
@@ -35,6 +36,7 @@ const THIRD_MODULES = [
 const COMPONENTS = [
   BreadcrumbComponent,
   DeleteConfirmationDialog,
+  ProductsListDialog,
   PageHeaderComponent,
   ErrorCodeComponent,
   Text3dComponent,
@@ -43,7 +45,7 @@ const COMPONENTS = [
   EasyTableComponent,
   EasyTableCellComponent,
 ];
-const COMPONENTS_DYNAMIC = [EasyDialogComponent,DeleteConfirmationDialog];
+const COMPONENTS_DYNAMIC = [EasyDialogComponent,DeleteConfirmationDialog,ProductsListDialog];
 const DIRECTIVES = [];
 const PIPES = [];
 

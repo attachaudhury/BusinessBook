@@ -19,7 +19,7 @@ export class ListComponent implements OnInit {
   selectedobject;
   constructor(private productService: ProductService,
     private matsnackbar: MatSnackBar,
-    public dialog: MatDialog,private router: Router) { }
+  public dialog: MatDialog,private router: Router) { }
   ngOnInit() {
     this.getpagedata();
   }

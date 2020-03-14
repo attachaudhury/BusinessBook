@@ -1,0 +1,62 @@
+<div fxLayout="row wrap" class="matero-row">
+  <div fxFlex="100" fxFlex.lt-sm="100" class="matero-col">
+    <mat-card>
+      <form class="matero-form-horizontal">
+        <div fxLayout="row wrap" fxLayoutGap="8px grid">
+          <div fxFlex="50" fxFlex.lt-sm="100">
+            <mat-form-field>
+              <mat-label>Name</mat-label>
+              <mat-select [(ngModel)]="searchmodel.product" name="searchmodel.product">
+                <mat-option  *ngFor="let cat of products" value="{{cat._id}}">{{cat.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div fxFlex="20" fxFlex.lt-sm="100">
+            <mat-form-field>
+              <input matInput [matDatepicker]="picker1" placeholder="From Date" [(ngModel)]="searchmodel.fromdate"  name="fromdate">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div fxFlex="20" fxFlex.lt-sm="100">
+            <mat-form-field>
+              <input matInput [matDatepicker]="picker2" placeholder="To Date" [(ngModel)]="searchmodel.todate"  name="todate">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div fxFlex="10" fxFlex.lt-sm="100">
+            <button type="button" (click)="search()" mat-raised-button color="primary" class="m-t-8">Search</button>
+          </div>
+        </div>
+      </form>
+    </mat-card>
+  </div>
+</div>
+<table mat-table [dataSource]="report" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="sale_id">
+      <th mat-header-cell *matHeaderCellDef> Sale Id </th>
+      <td mat-cell *matCellDef="let element"> {{element.sale_id}} </td>
+    </ng-container>
+    <ng-container matColumnDef="createddate">
+      <th mat-header-cell *matHeaderCellDef> Sale Date </th>
+      <td mat-cell *matCellDef="let element"> {{element.createddate | date:'dd/MM/yyyy hh:mm'}} </td>
+    </ng-container>
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef> Price </th>
+      <td mat-cell *matCellDef="let element"> {{element.product.price}} </td>
+    </ng-container>
+    <ng-container matColumnDef="quantity">
+      <th mat-header-cell *matHeaderCellDef> Qty </th>
+      <td mat-cell *matCellDef="let element"> {{element.product.quantity}} </td>
+    </ng-container>
+    <ng-container matColumnDef="total">
+      <th mat-header-cell *matHeaderCellDef> Total </th>
+      <td mat-cell *matCellDef="let element"> {{element.product.total}} </td>
+    </ng-container>
+    
+  
+    <tr mat-header-row *matHeaderRowDef="['sale_id','createddate','price','quantity','total']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['sale_id','createddate','price','quantity','total'];"></tr>
+  </table>

@@ -11,8 +11,8 @@ import { CategoryService } from '@core/services/httpServices/category.service';
 import { AccountingService } from '@core/services/httpServices/accounting.service';
 
 @Component({
-  selector: 'app-pos',
-  templateUrl: './pos.component.html',
+  selector: 'app-accounting-saleterminal',
+  templateUrl: './saleterminal.component.html',
   styles: [
     `
       .mat-raised-button {
@@ -22,7 +22,7 @@ import { AccountingService } from '@core/services/httpServices/accounting.servic
     `,
   ],
 })
-export class PosComponent implements OnInit {
+export class SaleTerminalComponent implements OnInit {
   searchtextcontrol = new FormControl();
   searchtextcontrolvaluechangesubsscription: Subscription;
   filteredproducts: product[] = [];
@@ -103,7 +103,6 @@ export class PosComponent implements OnInit {
       }
       else if (eventkey == "End" && this.cart.length > 0) {
         console.log(this.cart)
-        return;
         this.matsnackbar.open('Sale in process', 'Close', {duration:2000})
         var salestatus = await this.accountingService.accountingpossalenew({ list: this.cart })
         console.log(salestatus);

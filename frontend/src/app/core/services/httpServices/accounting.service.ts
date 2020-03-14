@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Subject } from 'rxjs';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Router} from '@angular/router';
 import { user } from '@shared/models/user';
@@ -45,6 +44,13 @@ export class AccountingService {
     accountingdashboarddataget(){
       return new Promise((resolve,reject)=>{
         this.http.get<{status?:string,data?:any}>(environment.apiUrl + "accounting/dashboarddataget").subscribe(res=>{
+          resolve(res)
+        })
+      })
+    }
+    accountingproductsalesreportget(data){
+      return new Promise((resolve,reject)=>{
+        this.http.post<{status?:string,data?:any}>(environment.apiUrl + "accounting/productsalesreportget",data).subscribe(res=>{
           resolve(res)
         })
       })

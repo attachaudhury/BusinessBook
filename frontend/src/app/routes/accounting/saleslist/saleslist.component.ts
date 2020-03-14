@@ -1,32 +1,25 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpService } from '@core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { product } from '@shared/models/product';
-import { EasyDialog } from '@shared';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material';
-import { ProductsListDialog } from '@shared/components/productslistdialog/productslistdialog.component';
-import { Router } from '@angular/router';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { AccountingService } from '@core/services/httpServices/accounting.service';
-
+import { DialogData } from '@shared/components/easy-dialog/easy-dialog.config';
+import { ProductsListDialog } from '@shared/components/productslistdialog/productslistdialog.component';
 @Component({
-  selector: 'app-accounting-purchaselist',
-  templateUrl: './purchaselist.component.html',
+  selector: 'app-accounting-saleslist',
+  templateUrl: './saleslist.component.html',
 })
-export class PurchaseListComponent implements OnInit {
+export class SalesListComponent implements OnInit {
   model:product[];
   selectedobject;
   constructor(
-    private httpService:HttpService,
     private accountingService:AccountingService,
-    private matsnackbar: MatSnackBar,
-    public dialog: MatDialog,
-    private easyDialog: EasyDialog,private router :Router) {}
+    public dialog: MatDialog,) {}
   ngOnInit() {
     this.getpagedata();
   }
   async getpagedata()
   {
-    var result = await this.accountingService.accountingpurchaseget();
+    var result = await this.accountingService.accountingpossaleget();
     console.log('loaded getpagedata');
       console.log(result);
       if(result["status"]=="success")
@@ -34,7 +27,6 @@ export class PurchaseListComponent implements OnInit {
        this.model =  result["data"];
       }
   }
-
   print(item) {
     this.selectedobject = item;
   }

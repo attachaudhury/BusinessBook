@@ -29,7 +29,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   chart1 = null;
   chartofaccountbalancetotal={};
-  chartofaccountbalancepastsevendays={};
 
   constructor(
     private ngZone: NgZone,
@@ -42,7 +41,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    this.ngZone.runOutsideAngular(() => this.initChart());
+   // this.ngZone.runOutsideAngular(() => this.initChart());
   }
 
   ngOnDestroy() {
@@ -51,7 +50,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  initChart() {
+  initChart(series,dates) {
     this.chart1 = new ApexCharts(document.querySelector('#chart1'), {
       chart: {
         height: 350,
@@ -64,31 +63,14 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       stroke: {
         curve: 'smooth',
       },
-      series: [
-        {
-          name: 'Sale',
-          data: [31, 40, 28, 51, 42, 109, 100],
-        },
-        {
-          name: 'Purchase',
-          data: [11, 32, 45, 32, 34, 52, 41],
-        },
-      ],
+      series: series,
       xaxis: {
         type: 'datetime',
-        categories: [
-          '2019-11-24T00:00:00',
-          '2019-11-24T01:30:00',
-          '2019-11-24T02:30:00',
-          '2019-11-24T03:30:00',
-          '2019-11-24T04:30:00',
-          '2019-11-24T05:30:00',
-          '2019-11-24T06:30:00',
-        ],
+        categories: dates,
       },
       tooltip: {
         x: {
-          format: 'dd/MM/yy HH:mm',
+          format: 'dd/MM/yy',
         },
       },
       legend: {
@@ -102,8 +84,21 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     var result = await this.accountingService.accountingdashboarddataget();
     console.log(result)
     if(result['status']=="success"){
+      console.log('asdf')
       this.chartofaccountbalancetotal = result['data']['chartofaccountbalancetotal']
-      this.chartofaccountbalancepastsevendays = result['data']['chartofaccountbalancepastsevendays']
+      var possevedaysdales = (result['data']['chartofaccountbalancepastsevendays'])['pos sale']; 
+      var dates = [];
+      var series = {name:'sale',data:[]};
+      for (let index = 0; index < possevedaysdales.length; index++) {
+        const element = possevedaysdales[index];
+        dates.push(element.date);
+        var amount = (element.amount>=0)?element.amount:-element.amount;
+        
+        series.data.push(amount)
+      }
+      console.log(dates)
+      console.log([series])
+      this.ngZone.runOutsideAngular(() => this.initChart([series],dates));
     }
   }
 }

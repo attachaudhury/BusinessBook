@@ -107,14 +107,14 @@ async function loadcharofaccount() {
   chartofaccount.cashaccount = await financeaccount.findOne({ name: "cash" });
   chartofaccount.cgsaccount = await financeaccount.findOne({ name: "cost of goods sold" });
   chartofaccount.inventoryaccount = await financeaccount.findOne({ name: "inventory" });
-  global.chartofaccount = chartofaccount
+  global.chartofaccount = chartofaccount;
 }
 app.get("/", (req, res, next) => {
   res.status(201).json({
     status: "success"
   });
 })
-// #endregion variables
+// #endregion variables 
 
 app.use('/api/user', userRouter);
 app.use('/api/accounting', accountingRouter);

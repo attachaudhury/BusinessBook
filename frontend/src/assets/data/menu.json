@@ -4,11 +4,7 @@
       "state": "dashboard",
       "name": "Dashboard",
       "type": "link",
-      "icon": "dashboard",
-      "badge": {
-        "color": "red-500",
-        "value": "5"
-      }
+      "icon": "dashboard"
     },
     {
       "state": "category",
@@ -30,7 +26,7 @@
     },
     {
       "state": "product",
-      "name": "Product",
+      "name": "Inventory",
       "type": "sub",
       "icon": "store",
       "children": [
@@ -46,16 +42,7 @@
         }
       ]
     },
-    {
-      "state": "pos",
-      "name": "POS",
-      "type": "link",
-      "icon": "shop",
-      "badge": {
-        "color": "green-500",
-        "value": "5"
-      }
-    },
+    
     {
       "state": "user",
       "name": "User",
@@ -81,18 +68,40 @@
       "icon": "account_balance_wallet",
       "children": [
         {
-          "state": "possaleslist",
-          "name": "POS Sales",
+          "state": "saleslist",
+          "name": "Sales List",
           "type": "link"
         },
         {
           "state": "purchasenew",
-          "name": "Purchase",
+          "name": "New Purchase",
           "type": "link"
         },
         {
           "state": "purchaselist",
           "name": "Purchase List",
+          "type": "link"
+        },
+        {
+          "state": "productsalesreport",
+          "name": "Products Sales Report",
+          "type": "link"
+        }
+      ]
+    },
+    {
+      "state": "accounting",
+      "name": "Sale",
+      "type": "sub",
+      "icon": "shop",
+      "badge": {
+        "color": "green-500",
+        "value": "3"
+      },
+      "children": [
+        {
+          "state": "saleterminal",
+          "name": "Sale Terminal",
           "type": "link"
         }
       ]
