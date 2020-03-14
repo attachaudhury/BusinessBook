@@ -18,6 +18,7 @@ export class EditComponent implements OnInit {
   categories: category[];
   modelid: string = '';
   model:product;
+  totalcostvalue:number=0;
   constructor(private fb: FormBuilder, private httpService: HttpService,private productService:ProductService,private categoryService:CategoryService,private accountingService:AccountingService, private activatedroute: ActivatedRoute,private matsnackbar: MatSnackBar) {
 
   }
@@ -42,6 +43,7 @@ export class EditComponent implements OnInit {
     if (requestresponse["status"] == "success") {
       
       this.model = requestresponse["data"]; 
+      this.totalcostvalue = this.model.purchaseprice+this.model.carrycost;
     }
 
   }
@@ -56,5 +58,24 @@ export class EditComponent implements OnInit {
         this.matsnackbar.open('Update Failed','Close',{duration:3000})
       }
     }
+  }
+  convertStringToNumber(value){
+    try{
+       var val =  parseFloat(value);
+      if(isNaN(val)){
+        return 0
+      }
+      else{
+        return val;
+      }
+    }catch(ex)
+    {
+      return 0;
+    }
+  }
+  updateTotalCostValue(){
+    console.log(this.convertStringToNumber(this.model.purchaseprice));
+    console.log(this.convertStringToNumber(this.model.carrycost));
+    this.totalcostvalue = this.convertStringToNumber(this.model.purchaseprice) + this.convertStringToNumber(this.model.carrycost)
   }
 }

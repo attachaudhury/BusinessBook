@@ -1,8 +1,5 @@
 // #region variables 
 var express = require('express');
-var path = require('path');
-var fs = require('fs');
-var fse = require('fs-extra');
 var bodyParser = require('body-parser');
 var mongoose = require("mongoose")
 var user = require('./Models/user')
@@ -10,13 +7,11 @@ var category = require('./Models/category')
 var product = require('./Models/product')
 var financeaccount = require('./Models/financeaccount')
 var financetransaction = require('./Models/financetransaction')
-var checkAuth = require("./middleware/check-auth");
 var userRouter = require('./routes/user');
-var accountingRouter = require('./routes/accounting');
-var productRouter = require('./routes/product');
 var categoryRouter = require('./routes/category');
+var productRouter = require('./routes/product');
+var accountingRouter = require('./routes/accounting');
 var app = express();
-var multiparty = require('multiparty');
 mongoose.connect('mongodb://localhost:27017/businessbook', {
   useNewUrlParser: true
 });
@@ -39,13 +34,15 @@ app.use((req, res, next) => {
 });
 
 app.use(express.static("public"));
-global.chartofaccount = {
-  cashaccount: null,
-  inventoryaccount: null,
+global.chartofaccount = {}
+var chartofaccount = {
   possaleaccount: null,
+  cashaccount: null,
   csgaccount: null,
+  inventoryaccount: null,
 };
 //dbsetting();
+loadcharofaccount()
 async function dbsetting() {
   await user.remove({});
   await category.remove({});
@@ -90,38 +87,27 @@ async function dbsetting() {
   }).catch(err => {
     console.log(err)
   })
-  product.create({ name: 'milkpack', purchaseprice: 30, saleprice: 40 })
-  product.create({ name: 'pepsi', purchaseprice: 20, saleprice: 25 })
-  product.create({ name: 'pampers', purchaseprice: 700, saleprice: 800 })
 
-  var elec = new category({ name: "Electronics" });
-  await elec.save();
+  var Bewerage = new category({ name: "Bewerage" });
+  await Bewerage.save();
 
-  var mob = new category({ name: "Mobiles" });
-  mob.parentId = elec._id;
-  await mob.save();
-
-  var tv = new category({ name: "Tv" });
-  tv.parentId = elec._id;
-  await tv.save();
-
-  var cl = new category({ name: "Clothes" });
-  await cl.save();
+  await product.create({ name: 'pepsi 250ml', purchaseprice: 20, saleprice: 25 })
+  await product.create({ name: 'coke can 500ml', purchaseprice: 45, saleprice: 50 })
 
 
   // assets account
-  global.chartofaccount.possaleccount = await financeaccount.create({ name: 'pos sale', type: 'income' });
-  global.chartofaccount.cashaccount = await financeaccount.create({ name: 'cash', type: 'asset' });
-  global.chartofaccount.csgaccount = await financeaccount.create({ name: 'cost of goods sold', type: 'expence' });
-  global.chartofaccount.inventoryaccount = await financeaccount.create({ name: 'inventory', type: 'asset' });
-
+  chartofaccount.possaleccount = await financeaccount.create({ name: 'pos sale', type: 'income' });
+  chartofaccount.cashaccount = await financeaccount.create({ name: 'cash', type: 'asset' });
+  chartofaccount.csgaccount = await financeaccount.create({ name: 'cost of goods sold', type: 'expence' });
+  chartofaccount.inventoryaccount = await financeaccount.create({ name: 'inventory', type: 'asset' });
+  global.chartofaccount = chartofaccount;
 }
-loadcharofaccount()
 async function loadcharofaccount() {
-  global.chartofaccount.possaleaccount = await financeaccount.findOne({ name: "pos sale" });
-  global.chartofaccount.cashaccount = await financeaccount.findOne({ name: "cash" });
-  global.chartofaccount.cgsaccount = await financeaccount.findOne({ name: "cost of goods sold" });
-  global.chartofaccount.inventoryaccount = await financeaccount.findOne({ name: "inventory" });
+  chartofaccount.possaleaccount = await financeaccount.findOne({ name: "pos sale" });
+  chartofaccount.cashaccount = await financeaccount.findOne({ name: "cash" });
+  chartofaccount.cgsaccount = await financeaccount.findOne({ name: "cost of goods sold" });
+  chartofaccount.inventoryaccount = await financeaccount.findOne({ name: "inventory" });
+  global.chartofaccount = chartofaccount
 }
 app.get("/", (req, res, next) => {
   res.status(201).json({
@@ -129,8 +115,6 @@ app.get("/", (req, res, next) => {
   });
 })
 // #endregion variables
-
-
 
 app.use('/api/user', userRouter);
 app.use('/api/accounting', accountingRouter);

@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
-var tree = require('mongoose-mpath');
-materializedPlugin = require('mongoose-materialized')
+var materializedPlugin = require('mongoose-materialized')
 const category = mongoose.Schema({
     name:String
 })

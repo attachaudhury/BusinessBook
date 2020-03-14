@@ -29,6 +29,7 @@ export class PosComponent implements OnInit {
   products: product[] = [];
   cart: product[] = [];
   carttotal: number = 0.0;
+  discounttotal: number = 0.0;
   scanningmode = false;
   selectedproduct: product = null;
   constructor(private httpservice: HttpService, private matsnackbar: MatSnackBar,private productService:ProductService,private categoryService:CategoryService,private accountingService:AccountingService) {
@@ -69,7 +70,7 @@ export class PosComponent implements OnInit {
     for (let index = 0; index < this.filteredproducts.length; index++) {
       const product = this.filteredproducts[index];
       if (product.name == selectedValue) {
-        var tmpproduct = { _id: product._id, name: product.name, barcode: product.barcode, saleprice: product.saleprice, quantity: 1, total: product.saleprice };
+        var tmpproduct = { _id: product._id, name: product.name, barcode: product.barcode, price: product.saleprice, discount: product.discount, quantity: 1, total: product.saleprice };
         this.selectedproduct = tmpproduct;
         break;
       }
@@ -82,7 +83,8 @@ export class PosComponent implements OnInit {
         let element = this.products[i];
         if(this.searchtextcontrol.value == element.barcode)
         {
-          this.addproducttocart(element);
+          var tmpproduct = { _id: element._id, name: element.name, barcode: element.barcode, price: element.saleprice, discount: element.discount, quantity: 1, total: element.saleprice };
+          this.addproducttocart(tmpproduct);
           break;
         }
       }
@@ -100,6 +102,8 @@ export class PosComponent implements OnInit {
         console.log(eventkey);
       }
       else if (eventkey == "End" && this.cart.length > 0) {
+        console.log(this.cart)
+        return;
         this.matsnackbar.open('Sale in process', 'Close', {duration:2000})
         var salestatus = await this.accountingService.accountingpossalenew({ list: this.cart })
         console.log(salestatus);
@@ -114,7 +118,6 @@ export class PosComponent implements OnInit {
         }
       }
     }
-
   }
   addproducttocart(product: product) {
     this.selectedproduct = product;
@@ -123,16 +126,15 @@ export class PosComponent implements OnInit {
       if (element._id == product._id) {
         element.quantity += 1;
         element['price'] =  element['price'];
-        element['total'] = element.quantity * element['price'];
+        element['total'] = element.quantity * (element['price']);
         this.cart = [...this.cart];
         this.updatecarttotal();
         return false;
       }
     }
+    console.log(product.discount)
     product.quantity=1;
-    product['price'] = product.saleprice;
-    product['total'] = product.saleprice;
-    delete product.saleprice;
+    product['total'] = product['price'];
     this.cart.push(product);
     this.cart = [...this.cart];
     this.updatecarttotal();
@@ -151,7 +153,9 @@ export class PosComponent implements OnInit {
   }
   updatecarttotal() {
     var tmptotal = 0.0;
-    this.cart.map(el => { tmptotal += el['total'] });
+    var tmpDiscounttotal = 0.0;
+    this.cart.map(el => { tmptotal += el['total'];tmpDiscounttotal += (el['discount']*el['quantity']); });
     this.carttotal = tmptotal;
+    this.discounttotal = tmpDiscounttotal;
   }
 }

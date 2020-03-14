@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-var tree = require('mongoose-mpath');
 materializedPlugin = require('mongoose-materialized')
 const financetransaction = mongoose.Schema({
     amount:Number,

@@ -3,16 +3,22 @@
 <div fxLayout="row wrap" class="matero-row">
   <div fxFlex="100" fxFlex.lt-sm="100" class="matero-col">
     <mat-card>
-      <mat-card-title>Category</mat-card-title>
+      <mat-card-title>Product Edit</mat-card-title>
       <form *ngIf="model" class="matero-form-horizontal">
         <div fxLayout="row wrap" fxLayoutGap="8px grid">
-          <div fxFlex="50" fxFlex.lt-sm="100">
+          <div fxFlex="25" fxFlex.lt-sm="100">
             <mat-form-field>
               <mat-label>Name</mat-label>
               <input matInput placeholder="Product Name" [(ngModel)]="model.name" name="name">
             </mat-form-field>
           </div>
-          <div fxFlex="50" fxFlex.lt-sm="100">
+          <div fxFlex="25" fxFlex.lt-sm="100">
+            <mat-form-field>
+              <mat-label>Barcode</mat-label>
+              <input matInput placeholder="Barcode" [(ngModel)]="model.barcode" name="barcode">
+            </mat-form-field>
+          </div>
+          <div fxFlex="25" fxFlex.lt-sm="100">
             <mat-form-field>
               <mat-label>Categories</mat-label>
               <mat-select [(ngModel)]="model.categories" name="categories" multiple>
@@ -21,34 +27,50 @@
             </mat-form-field>
           </div>
           
-          <div fxFlex="50" fxFlex.lt-sm="100">
+          <div fxFlex="25" fxFlex.lt-sm="100">
             <mat-form-field>
-              <mat-label>description</mat-label>
-              <input matInput placeholder="description" [(ngModel)]="model.description" name="description">
+              <mat-label>Description</mat-label>
+              <input matInput placeholder="Description" [(ngModel)]="model.description" name="description">
             </mat-form-field>
           </div>
-          <div fxFlex="50" fxFlex.lt-sm="100">
+          <div fxFlex="25" fxFlex.lt-sm="100">
             <mat-form-field>
-              <mat-label>purchaseprice</mat-label>
-              <input matInput placeholder="purchaseprice" [(ngModel)]="model.purchaseprice" name="purchaseprice">
+              <mat-label>Purchase Price</mat-label>
+              <input matInput placeholder="Purchase Price" (keyup)="updateTotalCostValue()" [(ngModel)]="model.purchaseprice" name="purchaseprice">
             </mat-form-field>
           </div>
-          <div fxFlex="50" fxFlex.lt-sm="100">
+          <div fxFlex="25" fxFlex.lt-sm="100">
             <mat-form-field>
-              <mat-label>quantity</mat-label>
-              <input matInput placeholder="quantity" [(ngModel)]="model.quantity" name="quantity">
+              <mat-label>Carry Cost</mat-label>
+              <input matInput placeholder="Carry Cost" (keyup)="updateTotalCostValue()" [(ngModel)]="model.carrycost" name="carrycost">
             </mat-form-field>
           </div>
-          <div fxFlex="50" fxFlex.lt-sm="100">
+          
+          <div fxFlex="25" fxFlex.lt-sm="100">
             <mat-form-field>
-              <mat-label>saleprice</mat-label>
-              <input matInput placeholder="saleprice" [(ngModel)]="model.saleprice" name="saleprice">
+              <mat-label>Total Cost Value</mat-label>
+              <input matInput placeholder="Total Cost Value" [(ngModel)]="totalcostvalue" name="totalcostvalue">
             </mat-form-field>
           </div>
-          <div fxFlex="50" fxFlex.lt-sm="100">
+
+          <div fxFlex="25" fxFlex.lt-sm="100">
             <mat-form-field>
-              <mat-label>barcode</mat-label>
-              <input matInput placeholder="barcode" [(ngModel)]="model.barcode" name="barcode">
+              <mat-label>Sale Price</mat-label>
+              <input matInput placeholder="Sale Price" [(ngModel)]="model.saleprice" name="saleprice">
+            </mat-form-field>
+          </div>
+          
+          
+          <div fxFlex="25" fxFlex.lt-sm="100">
+            <mat-form-field>
+              <mat-label>Discount</mat-label>
+              <input matInput placeholder="Discount" [(ngModel)]="model.discount" name="discount">
+            </mat-form-field>
+          </div>
+          <div fxFlex="25" fxFlex.lt-sm="100">
+            <mat-form-field>
+              <mat-label>Quantity</mat-label>
+              <input matInput placeholder="Quantity" [(ngModel)]="model.quantity" name="quantity">
             </mat-form-field>
           </div>
 

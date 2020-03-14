@@ -1,19 +1,22 @@
 var express = require("express");
 var router = express.Router();
-var user = require("../Models/user");
-var product = require("../Models/product");
-var category = require("../Models/product");
-var financeaccount = require("../Models/financeaccount");
-var financetransaction = require("../Models/financetransaction");
-var checkAuth = require("../middleware/check-auth");
+var category = require("../Models/category");
 
 
 router.get("/", async (req, res, next) => {
-  var result = await category.GetFullArrayTree();
+  try{
+    var result = await category.GetFullArrayTree();
   res.status(201).json({
     status: "success",
     data: result
   })
+  }catch(ex)
+  {
+    res.status(201).json({
+      status: "failed",
+      data: ex.message
+    })
+  }
 })
 router.post("/getonebyid", async (req, res, next) => {
   try {
@@ -29,7 +32,6 @@ router.post("/getonebyid", async (req, res, next) => {
       res.status(201).json({
         status: "success",
         data: result,
-
       })
     }
     else {

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { HttpService } from '@core';
 import { category } from '@shared/models/category';
 import { product } from '@shared/models/product';
@@ -16,7 +16,8 @@ export class AddComponent implements OnInit {
   reactiveForm2: FormGroup;
   categories:category[];
   model:product = {};
-  constructor(private fb: FormBuilder, private httpService: HttpService,private matsnackbar:MatSnackBar,private productService:ProductService,private categoryService:CategoryService,private accountingService:AccountingService) {
+  totalcostvalue:number=0;
+  constructor(private fb: FormBuilder,private matsnackbar:MatSnackBar,private productService:ProductService,private categoryService:CategoryService,private accountingService:AccountingService) {
   }
 
   ngOnInit() {
@@ -29,6 +30,7 @@ export class AddComponent implements OnInit {
       console.log(result);
       if(result["status"]=="success")
       {
+        this.totalcostvalue = 0;
         this.matsnackbar.open('Successfully saved','Close',{duration:3000})
         this.model={};
       }
@@ -51,5 +53,24 @@ export class AddComponent implements OnInit {
         this.categories = res["data"]
       }
     });
+  }
+  convertStringToNumber(value){
+    try{
+       var val =  parseFloat(value);
+      if(isNaN(val)){
+        return 0
+      }
+      else{
+        return val;
+      }
+    }catch(ex)
+    {
+      return 0;
+    }
+  }
+  updateTotalCostValue(){
+    console.log(this.convertStringToNumber(this.model.purchaseprice));
+    console.log(this.convertStringToNumber(this.model.carrycost));
+    this.totalcostvalue = this.convertStringToNumber(this.model.purchaseprice) + this.convertStringToNumber(this.model.carrycost)
   }
 }

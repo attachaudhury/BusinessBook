@@ -1,11 +1,6 @@
 var express = require("express");
 var router = express.Router();
-var user = require("../Models/user");
 var product = require("../Models/product");
-var category = require("../Models/product");
-var financeaccount = require("../Models/financeaccount");
-var financetransaction = require("../Models/financetransaction");
-var checkAuth = require("../middleware/check-auth");
 
 router.get("/", async (req, res, next) => {
   console.log('')
