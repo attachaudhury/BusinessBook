@@ -55,6 +55,12 @@ const routes: Routes = [
         data: { title: 'Accounting', titleI18n: 'accounting' },
         canActivate: [AuthGuard],
       },
+      {
+        path: 'party',
+        loadChildren: () => import('./party/party.module').then(m => m.PartyModule),
+        data: { title: 'Party', titleI18n: 'party' },
+        canActivate: [AuthGuard],
+      },
     ],
   },
   {

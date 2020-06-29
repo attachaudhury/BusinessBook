@@ -106,5 +106,34 @@
         }
       ]
     }
+    ,
+    {
+      "state": "party",
+      "name": "Parties",
+      "type": "sub",
+      "icon": "users",
+      "children": [
+        {
+          "state": "customeradd",
+          "name": "Add Customer",
+          "type": "link"
+        },
+        {
+          "state": "customerlist",
+          "name": "Customers List",
+          "type": "link"
+        },
+        {
+          "state": "vendoradd",
+          "name": "Add Vendor",
+          "type": "link"
+        },
+        {
+          "state": "vendorlist",
+          "name": "Vendors List",
+          "type": "link"
+        }
+      ]
+    }
   ]
 }

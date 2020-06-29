@@ -1,0 +1,56 @@
+<page-header></page-header>
+
+<div fxLayout="row wrap" class="matero-row">
+  <div fxFlex="100" fxFlex.lt-sm="100" class="matero-col">
+    <mat-card>
+      <mat-card-title>Party</mat-card-title>
+      <form class="matero-form-horizontal">
+        <div fxLayout="row wrap" fxLayoutGap="8px grid">
+          <div fxFlex="50" fxFlex.lt-sm="100">
+            <mat-form-field>
+              <mat-label>firstname</mat-label>
+              <input matInput placeholder="firstname" [(ngModel)]="model.firstname" name="firstname">
+            </mat-form-field>
+          </div>
+          <div fxFlex="50" fxFlex.lt-sm="100">
+            <mat-form-field>
+              <mat-label>lastname</mat-label>
+              <input matInput placeholder="lastname" [(ngModel)]="model.lastname" name="lastname">
+            </mat-form-field>
+          </div>
+          <div fxFlex="50" fxFlex.lt-sm="100">
+            <mat-form-field>
+              <mat-label>department</mat-label>
+              <mat-select [(ngModel)]="model.department" name="department">
+                <mat-option  *ngFor="let cat of departments" value="{{cat._id}}">{{cat.firstname}} {{cat.username}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          
+          <div fxFlex="50" fxFlex.lt-sm="100">
+            <mat-form-field>
+              <mat-label>username</mat-label>
+              <input matInput placeholder="username" [(ngModel)]="model.username" name="username">
+            </mat-form-field>
+          </div>
+          <div fxFlex="50" fxFlex.lt-sm="100">
+            <mat-form-field>
+              <mat-label>password</mat-label>
+              <input matInput placeholder="password" [(ngModel)]="model.password" name="password">
+            </mat-form-field>
+          </div>
+          <div fxFlex="50" fxFlex.lt-sm="100">
+            <mat-form-field>
+              <mat-label>role</mat-label>
+              <mat-select [(ngModel)]="model.role" name="role">
+                <mat-option  *ngFor="let cat of ['department','user']" value="{{cat}}">{{cat}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+        </div>
+        <button type="button" (click)="save()" mat-raised-button color="primary" class="m-t-8">Save</button>
+      </form>
+    </mat-card>
+  </div>
+</div>

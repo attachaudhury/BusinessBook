@@ -82,11 +82,11 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   async initpage(){
     var result = await this.accountingService.accountingdashboarddataget();
-    console.log(result)
     if(result['status']=="success"){
-      console.log('asdf')
-      this.chartofaccountbalancetotal = result['data']['chartofaccountbalancetotal']
-      var possevedaysdales = (result['data']['chartofaccountbalancepastsevendays'])['pos sale']; 
+      //this.chartofaccountbalancetotal = result['data']['chartofaccountbalancetotal']
+     console.log(result['data']['chartofaccountbalancepastsevendays'])
+      if(Object.keys(result['data']['chartofaccountbalancepastsevendays']).length!=0){
+        var possevedaysdales = (result['data']['chartofaccountbalancepastsevendays'])['pos sale']; 
       var dates = [];
       var series = {name:'sale',data:[]};
       for (let index = 0; index < possevedaysdales.length; index++) {
@@ -96,9 +96,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         
         series.data.push(amount)
       }
-      console.log(dates)
-      console.log([series])
       this.ngZone.runOutsideAngular(() => this.initChart([series],dates));
+      }
+      
     }
   }
 }
